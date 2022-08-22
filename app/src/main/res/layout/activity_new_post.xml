@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_pb"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.example.postappwithkolin.UI.NewPostActivity">
+
+    <EditText
+        android:id="@+id/NPA_et_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Put Your Comment Here "
+        android:padding="15dp" />
+
+    <ImageView
+        android:id="@+id/NPA_IV_PostImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_baseline_person_24" />
+
+    <Button
+        android:id="@+id/NPA_btn_uploadPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Upload Post"
+        android:textAllCaps="false" />
+
+
+</LinearLayout>
