@@ -84,6 +84,12 @@ dependencies{
     //picasso
     implementation 'com.squareup.picasso:picasso:2.8'
 
+    //cycle Image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //cardView
+    implementation("androidx.cardview:cardview:1.0.0")
+
 
 
 

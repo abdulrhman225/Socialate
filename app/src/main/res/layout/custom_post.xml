@@ -6,7 +6,8 @@
     android:layout_margin="10dp"
     android:background="@drawable/post_background">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/custom_UserPhoto"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -40,20 +41,21 @@
         android:layout_below="@+id/custom_UserPhoto"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
         android:text="TextView"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/custom_PostImage"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_below="@+id/custom_PostComment"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:srcCompat="@android:drawable/ic_input_get" />
+        <ImageView
+            android:id="@+id/custom_PostImage"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/custom_PostComment"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            app:srcCompat="@android:drawable/ic_input_get" />
+
 </RelativeLayout>
