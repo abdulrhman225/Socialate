@@ -37,9 +37,7 @@ class RegisterActivity : AppCompatActivity() {
     val REQ_CODE = 1
 
 
-
-
-    var uri: Uri ?= null
+    var uri: Uri? = null
 
     //Initialize FireBaseAuth
     val mAuth = Firebase.auth
@@ -53,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
     val storageRef = storage.reference
 
     //userPhotoPath
-    var userPhoto:String ?= null
+    var userPhoto: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,13 +79,11 @@ class RegisterActivity : AppCompatActivity() {
         //Create New User And Go To MainActivity & Save UserInformation to RealTime DataBase
         btn_Register.setOnClickListener(View.OnClickListener {
 
-                val email = et_Email.text.toString()
-                val password = et_Password.text.toString()
-                val UserName = et_UserName.text.toString()
-                val uri:String = uri.toString()
+            val email = et_Email.text.toString()
+            val password = et_Password.text.toString()
+            val UserName = et_UserName.text.toString()
+            val uri: String = uri.toString()
             if (et_Email != null && et_Password != null && et_UserName != null && iv_UserImage != null) {
-
-
 
 
                 // Make New UserAccount
@@ -96,8 +92,8 @@ class RegisterActivity : AppCompatActivity() {
                         if (it.isSuccessful) {
                             //set UserName and UserPhoto to MainActivity
                             val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("userName" , UserName)
-                            intent.putExtra("userPhoto" , userPhoto)
+                            intent.putExtra("userName", UserName)
+                            intent.putExtra("userPhoto", userPhoto)
                             startActivity(intent)
                         }
 
@@ -119,11 +115,12 @@ class RegisterActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
-             uri= data!!.data!!
+            uri = data!!.data!!
             Picasso.get().load(uri).into(iv_UserImage)
 
             //upload Picture
             uploadPicture()
+            //give system time to get the image from firebase
             Thread.sleep(5000)
         }
     }
@@ -150,7 +147,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-
     //getFile Extension like (jpg , png)
     fun getFileExtension(uri: Uri): String {
         val cR: ContentResolver = getContentResolver();
@@ -159,8 +155,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     //upload Picture to FireBase Storage
-    fun uploadPicture(){
-        var imagePath:String ?= null
+    fun uploadPicture() {
+        var imagePath: String? = null
 
         if (uri != null) {
 
@@ -176,7 +172,8 @@ class RegisterActivity : AppCompatActivity() {
                 storageReference.downloadUrl.addOnSuccessListener {
                     //get photo url
                     userPhoto = it.toString()
-                    Log.d("TAG", "uploadPicture: " + it.toString())                }
+                    Log.d("TAG", "uploadPicture: " + it.toString())
+                }
 
             })
 
