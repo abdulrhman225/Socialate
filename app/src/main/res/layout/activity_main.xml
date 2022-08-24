@@ -47,6 +47,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:clickable="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:ignore="SpeakableTextPresentCheck"
         android:layout_gravity="end"/>
