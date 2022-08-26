@@ -11,7 +11,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="@dimen/_100sdp">
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -19,9 +19,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/main_IV_userImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="20dp"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_marginLeft="@dimen/_20sdp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_baseline_person_24" />
 
@@ -31,13 +31,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="@dimen/_100sdp"
         android:layout_toEndOf="@+id/main_IV_userImage"
         android:layout_toRightOf="@+id/main_IV_userImage"
-        android:padding="10dp"
+        android:padding="@dimen/_10sdp"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="@dimen/_24sdp"
         android:textStyle="bold" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -64,8 +64,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:clickable="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:ignore="SpeakableTextPresentCheck"
         android:layout_gravity="end|bottom"/>

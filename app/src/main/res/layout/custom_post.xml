@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/_10sdp"
     android:background="@drawable/post_background">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/custom_UserPhoto"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         app:srcCompat="@drawable/ic_baseline_person_24" />
 
     <TextView
@@ -24,14 +24,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_26sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_toEndOf="@+id/custom_UserPhoto"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="@dimen/_24sdp"
         android:textStyle="bold" />
 
     <TextView
@@ -40,20 +40,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/custom_UserPhoto"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:padding="@dimen/_10sdp"
         android:text="TextView"
-        android:textSize="18sp" />
+        android:textSize="@dimen/_18sdp" />
 
     <ImageView
         android:id="@+id/custom_PostImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/_300sdp"
         android:layout_below="@+id/custom_PostComment"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:cropToPadding="false"
         android:scaleType="centerCrop"
         app:srcCompat="@android:drawable/ic_input_get"

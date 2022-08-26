@@ -13,15 +13,15 @@
         android:id="@+id/NPA_et_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/_10sdp"
         android:hint="Put Your Comment Here "
-        android:padding="15dp" />
+        android:padding="@dimen/_15sdp" />
 
     <ImageView
         android:id="@+id/NPA_IV_PostImage"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="10dp"
+        android:layout_height="@dimen/_300sdp"
+        android:layout_margin="@dimen/_10sdp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_baseline_person_24"
         />
@@ -30,9 +30,10 @@
         android:id="@+id/NPA_btn_uploadPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/_10sdp"
         android:text="Upload Post"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:padding="@dimen/_10sdp"/>
 
 
 </LinearLayout>

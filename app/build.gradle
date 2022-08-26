@@ -93,6 +93,10 @@ dependencies{
     //material
     implementation 'com.google.android.material:material:<version>'
 
+    //intuit library
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+
+
 
 
 

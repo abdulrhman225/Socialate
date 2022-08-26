@@ -9,7 +9,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="@dimen/_200sdp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -19,14 +19,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="30dp"
+                android:textSize="@dimen/_30sdp"
                 android:gravity="center"
                 android:text="TextView"
                 android:id="@+id/profileUserName"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
                 android:clickable="false"
 
 
@@ -34,12 +34,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePhoto"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:src="@drawable/ic_baseline_person_24"
                 android:layout_gravity="center_horizontal"
                 android:clickable="false"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="@dimen/_20sdp"/>
 
 
 

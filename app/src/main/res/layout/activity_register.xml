@@ -11,10 +11,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/Register_UserPhoto"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_250sdp"
         android:src="@drawable/ic_baseline_person_24"
-        android:layout_margin="10pt"/>
+        android:layout_margin="@dimen/_10sdp"/>
 
 
 
@@ -23,24 +23,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="User Name"
-        android:padding="15dp"
-        android:layout_margin="10dp"
+        android:padding="@dimen/_15sdp"
+        android:layout_margin="@dimen/_10sdp"
         />
     <EditText
         android:id="@+id/Register_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:padding="15dp"
-        android:layout_margin="10dp"
+        android:padding="@dimen/_15sdp"
+        android:layout_margin="@dimen/_10sdp"
         />
     <EditText
         android:id="@+id/Register_Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:padding="15dp"
-        android:layout_margin="10dp"
+        android:padding="@dimen/_15sdp"
+        android:layout_margin="@dimen/_10sdp"
         />
 
     <Button
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:textAllCaps="false"
-        android:layout_margin="10dp"/>
+        android:layout_margin="@dimen/_10sdp"/>
 
 
 
