@@ -81,6 +81,37 @@ class SAGDataFromDataBase : ViewModel() {
 
     }
 
+
+    //get All Data with Same User Name from firebase and put it in MutableLiveData
+    fun getPostsWitSameUserName(UserName:String) {
+        mRef.child("Posts").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                for  (snap:DataSnapshot in snapshot.children) {
+                    userName =
+                        snap.child("userName").getValue().toString()
+                    comment =
+                        snap.child("postComment").getValue().toString()
+                    PostImage =
+                        snap.child("PostImage").getValue().toString()
+                    UserPhoto =
+                        snap.child("UserPhoto").getValue().toString()
+
+                    if (userName == UserName) {
+
+                        userPost = UserPost(userName, comment, PostImage, UserPhoto)
+                        posts.add(userPost)
+                    }
+                }
+                mutable.value = posts
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "onCancelled: "+ error.message)
+            }
+        })
+
+    }
+
 }
 
 

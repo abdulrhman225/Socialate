@@ -1,26 +1,24 @@
 package com.example.postappwithkolin.Model
 
-import android.graphics.Bitmap
-import android.icu.number.NumberFormatter.with
-import android.net.Uri
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.with
 import com.example.postappwithkolin.R
+import com.example.postappwithkolin.UI.MainActivity
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storageMetadata
 import com.squareup.picasso.Picasso
 
-class recycler(var list:ArrayList<UserPost>) : RecyclerView.Adapter<recycler.viewHolder>() {
+class recycler(private val list:ArrayList<UserPost>, private val listener: OnItemClickListener) : RecyclerView.Adapter<recycler.viewHolder>() {
 
 
-    class viewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+
+
+    inner class viewHolder(itemView: View ) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
          var tv_userName:TextView
          var PostComment:TextView
          var postImage:ImageView
@@ -30,6 +28,16 @@ class recycler(var list:ArrayList<UserPost>) : RecyclerView.Adapter<recycler.vie
             PostComment = itemView.findViewById(R.id.custom_PostComment)
             postImage = itemView.findViewById(R.id.custom_PostImage)
             UserPhoto = itemView.findViewById(R.id.custom_UserPhoto)
+
+
+            itemView.setOnClickListener(this)
+
+
+        }
+
+        override fun onClick(p0: View?) {
+            val position:Int = adapterPosition
+            listener.onItemClick(position)
         }
     }
 
@@ -48,10 +56,17 @@ class recycler(var list:ArrayList<UserPost>) : RecyclerView.Adapter<recycler.vie
         Picasso.get().load(userPost.UserPhoto).into(holder.UserPhoto)
 
 
+
+
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    interface  OnItemClickListener {
+        fun onItemClick(position:Int)
+        
     }
 
 

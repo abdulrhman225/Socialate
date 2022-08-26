@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -23,13 +24,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
 
 
     lateinit var iv_UserImage: ImageView
@@ -48,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     var userName: String? = null
     var userPhoto:String ?= null
     var userPhotoInPost:String ?= null
+
+    var posts:ArrayList<UserPost> = ArrayList()
 
 
     //Initialize SAGDataFromFireBase
@@ -74,11 +73,12 @@ class MainActivity : AppCompatActivity() {
 
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
 
-        model.getPosts()
+         model.getPosts()
 
         //observer to updated data
         model.mutable.observe(this, Observer {
-            rv = recycler(it)
+            posts = it
+            rv = recycler(it , this )
             main_rv.adapter = rv
             main_rv.layoutManager = LinearLayoutManager(this)
             main_rv.setHasFixedSize(true)
@@ -155,6 +155,19 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onItemClick(position: Int) {
+        val user:UserPost = posts[position]
+        val intent = Intent(this , profileActivity::class.java)
+        intent.putExtra("UserName" ,user.UserName )
+        intent.putExtra("UserPhoto",user.UserPhoto )
+        startActivity(intent)
+
+
+
+
+
     }
 
 
