@@ -70,6 +70,7 @@ class SAGDataFromDataBase : ViewModel() {
 
                     userPost = UserPost(userName, comment, PostImage ,UserPhoto)
                     posts.add(userPost)
+                    Log.d("TAG", "onDataChange: " + PostImage)
                 }
                 mutable.value = posts
             }

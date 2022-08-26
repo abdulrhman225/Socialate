@@ -40,6 +40,8 @@ class profileActivity : AppCompatActivity(),recycler.OnItemClickListener{
         rv_posts = findViewById(R.id.profilePosts)
 
 
+
+        //get userName and UserPhoto from mainActivity a
         val intent = intent
         userName = intent.getStringExtra("UserName")
         userPhoto = intent.getStringExtra("UserPhoto")
@@ -52,6 +54,7 @@ class profileActivity : AppCompatActivity(),recycler.OnItemClickListener{
 
         model.getPostsWitSameUserName(userName!!)
 
+        //observer to get data that have the same UserName
         model.mutable.observe(this , Observer {
             rv = recycler(it , this)
             rv_posts.adapter = rv

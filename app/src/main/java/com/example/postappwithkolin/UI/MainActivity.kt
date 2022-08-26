@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
         putUserNameAndUserphoto()
 
 
-
-
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
 
          model.getPosts()
@@ -157,6 +155,7 @@ class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
         }
     }
 
+    //send userName and userPhoto when the user click on recyclerView item
     override fun onItemClick(position: Int) {
         val user:UserPost = posts[position]
         val intent = Intent(this , profileActivity::class.java)

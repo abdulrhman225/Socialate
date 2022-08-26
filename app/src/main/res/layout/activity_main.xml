@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="com.example.postappwithkolin.UI.MainActivity">
 
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/main_IV_userImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/ic_baseline_person_24" />
 
 
     <TextView
         android:id="@+id/main_UserName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="100dp"
         android:layout_toEndOf="@+id/main_IV_userImage"
         android:layout_toRightOf="@+id/main_IV_userImage"
         android:padding="10dp"
@@ -32,13 +39,23 @@
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Main_Recycler"
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/main_IV_userImage"
-         />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Main_Recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/main_IV_userImage"
+            />
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_FLB"
@@ -51,7 +68,5 @@
         android:layout_marginBottom="10dp"
         app:srcCompat="@android:drawable/ic_input_add"
         tools:ignore="SpeakableTextPresentCheck"
-        android:layout_gravity="end"/>
-
-
-</RelativeLayout>
+        android:layout_gravity="end|bottom"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

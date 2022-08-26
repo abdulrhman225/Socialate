@@ -37,8 +37,8 @@ class NewPostActivity : AppCompatActivity() {
     val REQ_CODE: Int = 1
     var uri: Uri? = null
 
-    var userName: String? = null
-    var userPhoto: String? = null
+    lateinit var userName: String
+    lateinit var userPhoto: String
 
     lateinit var userPost: UserPost
 
@@ -63,14 +63,14 @@ class NewPostActivity : AppCompatActivity() {
 
         //get 1-userName 2-UserPhoto From MainActivity
         val intent = intent
-        userName = intent.getStringExtra("userName")
-        userPhoto = intent.getStringExtra("userPhoto")
+        userName = intent.getStringExtra("userName").toString()
+        userPhoto = intent.getStringExtra("userPhoto").toString()
 
         //send Image and Comment and Return to MainActivity
         btn_uploadPost.setOnClickListener(View.OnClickListener {
             var comment = et_Comment.text.toString()
             //save data in UserPost.class
-            userPost = UserPost(userName!!, comment, PostImageUri!! , userPhoto!!)
+            userPost = UserPost(userName, comment, PostImageUri.toString(), userPhoto)
             SendPosts.uploadPost(userPost)
 
             finish()
