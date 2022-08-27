@@ -1,6 +1,5 @@
 package com.example.postappwithkolin.Model
 
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.R
-import com.example.postappwithkolin.UI.MainActivity
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storageMetadata
 import com.squareup.picasso.Picasso
 
-class recycler(private val list: ArrayList<UserPost>, private val listener: OnItemClickListener) :
-    RecyclerView.Adapter<recycler.viewHolder>() {
+class Post_recycler(private val list: ArrayList<UserPost>, private val listener: OnItemClickListener) :
+    RecyclerView.Adapter<Post_recycler.viewHolder>() {
 
 
     inner class viewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -29,7 +25,6 @@ class recycler(private val list: ArrayList<UserPost>, private val listener: OnIt
             PostComment = itemView.findViewById(R.id.custom_PostComment)
             postImage = itemView.findViewById(R.id.custom_PostImage)
             UserPhoto = itemView.findViewById(R.id.custom_UserPhoto)
-
 
             tv_userName.setOnClickListener(this)
 
@@ -51,12 +46,17 @@ class recycler(private val list: ArrayList<UserPost>, private val listener: OnIt
 
     override fun onBindViewHolder(holder: viewHolder, position: Int) {
         var userPost = list.get(position)
+
         holder.tv_userName.text = userPost.UserName
         holder.PostComment.text = userPost.postComment
+
+
         if (!userPost.postImage.equals("null")) {
             holder.postImage.visibility = View.VISIBLE
             Picasso.get().load(userPost.postImage).into(holder.postImage)
         }
+
+
         Picasso.get().load(userPost.UserPhoto).into(holder.UserPhoto)
 
 

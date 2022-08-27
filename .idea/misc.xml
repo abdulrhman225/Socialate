@@ -10,11 +10,14 @@
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/post_background.xml" value="0.17685185185185184" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_log_in.xml" value="0.2" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_message.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_new_post.xml" value="0.1480978260869565" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_register.xml" value="0.144" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/custom_messages.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/custom_post.xml" value="0.2" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/log_out_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/message.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/profile_edit.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2518518518518518" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2518518518518518" />

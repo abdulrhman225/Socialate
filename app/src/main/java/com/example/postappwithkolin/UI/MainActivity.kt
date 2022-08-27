@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -16,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.Model.UserPost
-import com.example.postappwithkolin.Model.recycler
+import com.example.postappwithkolin.Model.Post_recycler
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -26,7 +25,7 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 
-class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
+class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
 
 
     lateinit var iv_UserImage: ImageView
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
     val mAuth = Firebase.auth
 
     //Initialize RecyclerView
-    var rv: recycler? = null
+    var rv: Post_recycler? = null
 
 
     var userName: String? = null
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() , recycler.OnItemClickListener {
         //observer to updated data
         model.mutable.observe(this, Observer {
             posts = it
-            rv = recycler(it , this )
+            rv = Post_recycler(it , this )
             main_rv.adapter = rv
             main_rv.layoutManager = LinearLayoutManager(this)
             main_rv.setHasFixedSize(true)

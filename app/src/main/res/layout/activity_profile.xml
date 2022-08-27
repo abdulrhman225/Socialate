@@ -25,12 +25,11 @@
                 android:id="@+id/profileUserName"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_50sdp"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginRight="@dimen/_50sdp"
                 android:clickable="false"
-
-
                 />
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePhoto"
