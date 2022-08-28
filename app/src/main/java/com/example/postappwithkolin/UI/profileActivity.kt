@@ -23,6 +23,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
     lateinit var iv_profileImage: ImageView
     lateinit var tv_userName: TextView
     lateinit var rv_posts: RecyclerView
+    lateinit var btn_sendMessage:ImageButton
 
     lateinit var rv :Post_recycler
 
@@ -41,6 +42,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
         iv_profileImage = findViewById(R.id.profilePhoto)
         tv_userName = findViewById(R.id.profileUserName)
         rv_posts = findViewById(R.id.profilePosts)
+        btn_sendMessage = findViewById(R.id.profile_send)
 
 
 
@@ -67,7 +69,14 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
         })
 
 
-
+        //Send Me to MessageActivity and UserName UserPhoto With Me
+        btn_sendMessage.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this , MessageActivity::class.java)
+            intent.putExtra("UserNameAccepter" ,userName)
+            intent.putExtra("UserNameSender" ,mAuth.currentUser!!.displayName.toString())
+            intent.putExtra("UserPhoto" , userPhoto)
+            startActivity(intent)
+        })
     }
 
     override fun onItemClick(position: Int) {

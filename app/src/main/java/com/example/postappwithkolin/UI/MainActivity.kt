@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,13 +26,14 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 
-class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
+class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
 
 
     lateinit var iv_UserImage: ImageView
     lateinit var tv_UserName: TextView
     lateinit var main_rv: RecyclerView
     lateinit var FAB_newPost: FloatingActionButton
+    lateinit var toobar :Toolbar
 
 
     //Initialize FireBaseAuth
@@ -42,10 +44,10 @@ class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
 
 
     var userName: String? = null
-    var userPhoto:String ?= null
-    var userPhotoInPost:String ?= null
+    var userPhoto: String? = null
+    var userPhotoInPost: String? = null
 
-    var posts:ArrayList<UserPost> = ArrayList()
+    var posts: ArrayList<UserPost> = ArrayList()
 
 
     //Initialize SAGDataFromFireBase
@@ -60,22 +62,22 @@ class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
         tv_UserName = findViewById(R.id.main_UserName)
         main_rv = findViewById(R.id.Main_Recycler)
         FAB_newPost = findViewById(R.id.main_FLB)
+        toobar = findViewById(R.id.mainToolbar)
 
-
+        setSupportActionBar(toobar)
 
 
         //put UserName And UserPhoto in the MainActivity
         putUserNameAndUserphoto()
 
-
+        //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
 
-         model.getPosts()
+        model.getPosts()
 
-        //observer to updated data
         model.mutable.observe(this, Observer {
             posts = it
-            rv = Post_recycler(it , this )
+            rv = Post_recycler(it, this)
             main_rv.adapter = rv
             main_rv.layoutManager = LinearLayoutManager(this)
             main_rv.setHasFixedSize(true)
@@ -120,8 +122,7 @@ class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
         if (mAuth.currentUser == null) {
             var intent = Intent(applicationContext, LogInActivity::class.java)
             startActivity(intent)
-        }
-        else{
+        } else {
             //put UserName and UserPhoto from UserInformation
             tv_UserName.text = mAuth.currentUser!!.displayName
             Picasso.get().load(mAuth.currentUser!!.photoUrl).into(iv_UserImage)
@@ -131,11 +132,11 @@ class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
 
 
     //get UserName and UserPhoto from Register Activity and update the UserInformation
-    fun putUserNameAndUserphoto(){
+    fun putUserNameAndUserphoto() {
         val intent = getIntent()
         userName = intent.getStringExtra("userName")
         userPhoto = intent.getStringExtra("userPhoto")
-        if (userName != null && userPhoto!= null) {
+        if (userName != null && userPhoto != null) {
             val user = mAuth.currentUser
             val updateProfile = userProfileChangeRequest {
                 setDisplayName(userName)
@@ -156,14 +157,11 @@ class MainActivity : AppCompatActivity() , Post_recycler.OnItemClickListener {
 
     //send userName and userPhoto when the user click on recyclerView item
     override fun onItemClick(position: Int) {
-        val user:UserPost = posts[position]
-        val intent = Intent(this , profileActivity::class.java)
-        intent.putExtra("UserName" ,user.UserName )
-        intent.putExtra("UserPhoto",user.UserPhoto )
+        val user: UserPost = posts[position]
+        val intent = Intent(this, profileActivity::class.java)
+        intent.putExtra("UserName", user.UserName)
+        intent.putExtra("UserPhoto", user.UserPhoto)
         startActivity(intent)
-
-
-
 
 
     }

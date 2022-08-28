@@ -29,7 +29,16 @@
                 android:layout_marginRight="@dimen/_50sdp"
                 android:clickable="false"
                 />
-
+            <ImageButton
+                android:id="@+id/profile_send"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/ic_baseline_send_24"
+                android:background="#009586"
+                android:layout_gravity="center|right"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePhoto"

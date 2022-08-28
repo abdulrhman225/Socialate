@@ -129,10 +129,7 @@ class NewPostActivity : AppCompatActivity() {
             )
 
             storageReference.putFile(uri!!).addOnSuccessListener(OnSuccessListener {
-                //give the system time to get image from firebase
-                Thread.sleep(5000)
-
-              //get image url
+                //get image url
                 storageReference.downloadUrl.addOnSuccessListener {
                     PostImageUri = it.toString()
                     Log.d("TAG", "uploadPicture: " + it.toString())

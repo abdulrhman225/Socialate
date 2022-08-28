@@ -57,6 +57,7 @@ class SAGDataFromDataBase : ViewModel() {
     fun getPosts() {
         mRef.child("Posts").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                posts.clear()
                 for  (snap:DataSnapshot in snapshot.children) {
                     userName =
                         snap.child("userName").getValue().toString()
