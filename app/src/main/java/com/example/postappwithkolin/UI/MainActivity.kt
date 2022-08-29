@@ -24,6 +24,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
@@ -76,8 +79,10 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
         model.getPosts()
 
         model.mutable.observe(this, Observer {
-            posts = it
-            rv = Post_recycler(it, this)
+            GlobalScope.launch(Dispatchers.IO) {
+                posts = it
+            }
+            rv = Post_recycler(posts, this)
             main_rv.adapter = rv
             main_rv.layoutManager = LinearLayoutManager(this)
             main_rv.setHasFixedSize(true)

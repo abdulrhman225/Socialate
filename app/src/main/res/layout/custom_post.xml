@@ -49,7 +49,7 @@
     <ImageView
         android:id="@+id/custom_PostImage"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_300sdp"
+        android:layout_height="@dimen/_270sdp"
         android:layout_below="@+id/custom_PostComment"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"

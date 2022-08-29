@@ -13,8 +13,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.log
 
 class SAGDataFromDataBase : ViewModel() {
@@ -58,22 +60,29 @@ class SAGDataFromDataBase : ViewModel() {
         mRef.child("Posts").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
                 posts.clear()
-                for  (snap:DataSnapshot in snapshot.children) {
-                    userName =
-                        snap.child("userName").getValue().toString()
-                    comment =
-                        snap.child("postComment").getValue().toString()
-                    PostImage =
-                        snap.child("PostImage").getValue().toString()
-                    UserPhoto =
-                        snap.child("UserPhoto").getValue().toString()
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    for (snap: DataSnapshot in snapshot.children) {
+                        userName =
+                            snap.child("userName").getValue().toString()
+                        comment =
+                            snap.child("postComment").getValue().toString()
+                        PostImage =
+                            snap.child("PostImage").getValue().toString()
+                        UserPhoto =
+                            snap.child("UserPhoto").getValue().toString()
+
+                        
 
 
-                    userPost = UserPost(userName, comment, PostImage ,UserPhoto)
-                    posts.add(userPost)
-                    Log.d("TAG", "onDataChange: " + PostImage)
+                        userPost = UserPost(userName, comment, PostImage, UserPhoto)
+                        posts.add(userPost)
+                        Log.d("TAG", "onDataChange: " + PostImage)
+                    }
+                    withContext(Dispatchers.Main) {
+                        mutable.value = posts
+                    }
                 }
-                mutable.value = posts
             }
 
             override fun onCancelled(error: DatabaseError) {
