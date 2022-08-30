@@ -11,8 +11,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/Register_UserPhoto"
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_250sdp"
+        android:layout_width= "@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
         android:src="@drawable/ic_baseline_person_24"
         android:layout_margin="@dimen/_10sdp"/>
 
@@ -33,6 +33,7 @@
         android:hint="Email"
         android:padding="@dimen/_15sdp"
         android:layout_margin="@dimen/_10sdp"
+        android:inputType="textEmailAddress"
         />
     <EditText
         android:id="@+id/Register_Password"
@@ -41,6 +42,7 @@
         android:hint="Password"
         android:padding="@dimen/_15sdp"
         android:layout_margin="@dimen/_10sdp"
+        android:inputType="textPassword"
         />
 
     <Button

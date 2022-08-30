@@ -72,7 +72,7 @@ class SAGDataFromDataBase : ViewModel() {
                         UserPhoto =
                             snap.child("UserPhoto").getValue().toString()
 
-                        
+
 
 
                         userPost = UserPost(userName, comment, PostImage, UserPhoto)

@@ -10,7 +10,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_250sdp"
+        android:layout_height="@dimen/_200sdp"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:layout_marginLeft="@dimen/_10sdp"
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
         android:padding="@dimen/_15sdp"
+        android:inputType="textEmailAddress"
         android:hint="Email"
         />
 
@@ -34,6 +35,7 @@
         android:layout_margin="@dimen/_10sdp"
         android:padding="@dimen/_15sdp"
         android:hint="Password"
+        android:inputType="textPassword"
         />
 
     <TextView
