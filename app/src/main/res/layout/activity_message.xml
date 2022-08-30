@@ -27,10 +27,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:gravity="center"
+                android:layout_marginRight="@dimen/_20sdp"
                 android:text="TextView"
-                android:textSize="@dimen/_30sdp" />
+                android:textSize="@dimen/_30sdp"
+                android:textColor="#000000"
+                android:fontFamily="@font/user_name_font"
+                />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
