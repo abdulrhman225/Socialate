@@ -96,6 +96,10 @@ dependencies{
     //intuit library
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
+    //swipe to refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+
 
 
 

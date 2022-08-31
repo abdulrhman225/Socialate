@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.postappwithkolin.Model.UserPost
 import com.example.postappwithkolin.Model.Post_recycler
 import com.example.postappwithkolin.R
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
     lateinit var main_rv: RecyclerView
     lateinit var FAB_newPost: FloatingActionButton
     lateinit var toobar :Toolbar
+    lateinit var swipe:SwipeRefreshLayout
 
 
     //Initialize FireBaseAuth
@@ -65,7 +67,9 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
         tv_UserName = findViewById(R.id.main_UserName)
         main_rv = findViewById(R.id.Main_Recycler)
         FAB_newPost = findViewById(R.id.main_FLB)
+        swipe = findViewById(R.id.MainSwipe)
         toobar = findViewById(R.id.mainToolbar)
+
 
         setSupportActionBar(toobar)
 
@@ -75,18 +79,9 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
 
         //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
+        updateData()
 
-        model.getPosts()
 
-        model.mutable.observe(this, Observer {
-            GlobalScope.launch(Dispatchers.IO) {
-                posts = it
-            }
-            rv = Post_recycler(posts, this)
-            main_rv.adapter = rv
-            main_rv.layoutManager = LinearLayoutManager(this)
-            main_rv.setHasFixedSize(true)
-        })
 
 
         //Going to NewPostActivity
@@ -96,6 +91,12 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
             intent.putExtra("userPhoto", userPhotoInPost)
             startActivity(intent)
         })
+
+        //swipe to update data
+        swipe.setOnRefreshListener {
+            updateData()
+            swipe.isRefreshing = false
+        }
 
     }
 
@@ -169,6 +170,16 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
         startActivity(intent)
 
 
+    }
+    fun updateData(){
+        model.getPosts()
+
+        model.mutable.observe(this, Observer {
+            rv = Post_recycler(it, this)
+            main_rv.adapter = rv
+            main_rv.layoutManager = LinearLayoutManager(this)
+            main_rv.setHasFixedSize(true)
+        })
     }
 
 
