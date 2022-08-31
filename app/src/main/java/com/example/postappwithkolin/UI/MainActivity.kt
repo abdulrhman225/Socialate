@@ -173,8 +173,8 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
     }
     fun updateData(){
         model.getPosts()
-
         model.mutable.observe(this, Observer {
+            posts.addAll(it)
             rv = Post_recycler(it, this)
             main_rv.adapter = rv
             main_rv.layoutManager = LinearLayoutManager(this)
