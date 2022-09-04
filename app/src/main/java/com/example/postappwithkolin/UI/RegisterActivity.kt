@@ -10,13 +10,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewManager
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.postappwithkolin.Model.UserInformation
 import com.example.postappwithkolin.R
+import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.ktx.auth
@@ -53,6 +57,9 @@ class RegisterActivity : AppCompatActivity() {
     //userPhotoPath
     var userPhoto: String? = null
 
+    //Initialize Post Source
+    var model: SAGDataFromDataBase = SAGDataFromDataBase()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +71,11 @@ class RegisterActivity : AppCompatActivity() {
         et_Password = findViewById(R.id.Register_Password)
         btn_Register = findViewById(R.id.Register_register)
         iv_UserImage = findViewById(R.id.Register_UserPhoto)
+
+
+
+        model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
+        model.getUsers()
 
 
         //Check Permission
@@ -78,27 +90,8 @@ class RegisterActivity : AppCompatActivity() {
 
         //Create New User And Go To MainActivity & Save UserInformation to RealTime DataBase
         btn_Register.setOnClickListener(View.OnClickListener {
+            makeNewAccount()
 
-            val email = et_Email.text.toString()
-            val password = et_Password.text.toString()
-            val UserName = et_UserName.text.toString()
-            val uri: String = uri.toString()
-            if (et_Email != null && et_Password != null && et_UserName != null && iv_UserImage != null) {
-
-
-                // Make New UserAccount
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
-                    OnCompleteListener {
-                        if (it.isSuccessful) {
-                            //set UserName and UserPhoto to MainActivity
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("userName", UserName)
-                            intent.putExtra("userPhoto", userPhoto)
-                            startActivity(intent)
-                        }
-
-                    })
-            }
         })
 
 
@@ -178,6 +171,42 @@ class RegisterActivity : AppCompatActivity() {
             })
 
         }
+    }
+
+
+    //make New Account and if the userName is Exist
+    fun makeNewAccount() {
+        val email = et_Email.text.toString()
+        val password = et_Password.text.toString()
+        val UserName = et_UserName.text.toString()
+        val uri: String = uri.toString()
+
+        if (email != "" && password != "" && UserName != "" && uri != "") {
+
+            //check if the UserName is Already exists
+            if (!model.check_if_UserNameIs_exist(UserName)) {
+
+                // Make New UserAccount
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
+                    OnCompleteListener {
+                        if (it.isSuccessful) {
+                            //set UserName and UserPhoto to MainActivity
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("userName", UserName)
+                            intent.putExtra("userPhoto", userPhoto)
+                            startActivity(intent)
+
+                            //send UserInformation to Firebase
+                            model.uploadUserInfo(UserInformation(UserName, email, uri))
+                        }
+
+                    })
+            }
+            else{
+                Toast.makeText(applicationContext , "UserName is Already Exists " , Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
 
