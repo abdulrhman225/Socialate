@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/PersonImageAndUserName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
+    android:background="@drawable/post_background"
+    android:elevation="@dimen/_10sdp"
+    android:padding="@dimen/_10sdp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/main_IV_userImage"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:background="@drawable/circle_image_background"
+        android:src="@drawable/ic_baseline_person_24" />
+
+
+    <TextView
+        android:id="@+id/customUsers_UserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_toEndOf="@+id/main_IV_userImage"
+        android:fontFamily="@font/user_name_font"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_24sdp" />
+
+
+</RelativeLayout>

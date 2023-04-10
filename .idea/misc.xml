@@ -4,19 +4,23 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2518518518518518" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.25277777777777777" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_baseline_message_24.xml" value="0.25277777777777777" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.25277777777777777" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2518518518518518" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/drawable/post_background.xml" value="0.17685185185185184" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/font/text_font.xml" value="0.28" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_log_in.xml" value="0.2" />
-        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_main.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_message.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_new_post.xml" value="0.1480978260869565" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/activity_register.xml" value="0.144" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/custom_messages.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/layout/custom_post.xml" value="0.2" />
+        <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/edit_profile.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/log_out_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/message.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/PostAppWithKolin/app/src/main/res/menu/profile_edit.xml" value="0.25416666666666665" />

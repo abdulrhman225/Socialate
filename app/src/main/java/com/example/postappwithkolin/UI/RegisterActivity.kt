@@ -1,9 +1,13 @@
 package com.example.postappwithkolin.UI
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.session.MediaSession
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +18,9 @@ import android.view.ViewManager
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,21 +29,28 @@ import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
     lateinit var iv_UserImage: ImageView
-    lateinit var et_UserName: EditText
-    lateinit var et_Email: EditText
-    lateinit var et_Password: EditText
+    lateinit var et_UserName: TextInputEditText
+    lateinit var et_Email: TextInputEditText
+    lateinit var et_Password: TextInputEditText
     lateinit var btn_Register: Button
+    lateinit var btn_fallback: ImageButton
     val REQ_CODE = 1
 
 
@@ -60,7 +73,12 @@ class RegisterActivity : AppCompatActivity() {
     //Initialize Post Source
     var model: SAGDataFromDataBase = SAGDataFromDataBase()
 
+    var Token:String ?= null
 
+
+
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -71,11 +89,12 @@ class RegisterActivity : AppCompatActivity() {
         et_Password = findViewById(R.id.Register_Password)
         btn_Register = findViewById(R.id.Register_register)
         iv_UserImage = findViewById(R.id.Register_UserPhoto)
+        btn_fallback = findViewById(R.id.Register_fallBack)
 
 
 
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
-        model.getUsers()
+        model.getAllUsers()
 
 
         //Check Permission
@@ -91,7 +110,11 @@ class RegisterActivity : AppCompatActivity() {
         //Create New User And Go To MainActivity & Save UserInformation to RealTime DataBase
         btn_Register.setOnClickListener(View.OnClickListener {
             makeNewAccount()
+        })
 
+
+        btn_fallback.setOnClickListener(View.OnClickListener {
+            finish()
         })
 
 
@@ -114,7 +137,6 @@ class RegisterActivity : AppCompatActivity() {
             //upload Picture
             uploadPicture()
             //give system time to get the image from firebase
-            Thread.sleep(5000)
         }
     }
 
@@ -123,12 +145,17 @@ class RegisterActivity : AppCompatActivity() {
     fun permission() {
         val args = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY
         )
 
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
             ) == PackageManager.PERMISSION_GRANTED
         ) {
 
@@ -160,12 +187,16 @@ class RegisterActivity : AppCompatActivity() {
                     )
                 }"
             )
+            var dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+            var dia = dialog.create()
+            dia.show()
 
             storageReference.putFile(uri!!).addOnSuccessListener(OnSuccessListener {
                 storageReference.downloadUrl.addOnSuccessListener {
                     //get photo url
                     userPhoto = it.toString()
                     Log.d("TAG", "uploadPicture: " + it.toString())
+                    dia.dismiss()
                 }
 
             })
@@ -174,14 +205,29 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-    //make New Account and if the userName is Exist
+    //make New Account
     fun makeNewAccount() {
         val email = et_Email.text.toString()
         val password = et_Password.text.toString()
         val UserName = et_UserName.text.toString()
-        val uri: String = uri.toString()
+        val uri: String = userPhoto.toString()
+        var Token:String ?= null
 
-        if (email != "" && password != "" && UserName != "" && uri != "") {
+
+        //send Token and UserName
+        var dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+        var dia :AlertDialog = dialog.create()
+        dia.show()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener {
+                if (it.isSuccessful) {
+                    dia.dismiss()
+                    Token = it.result
+                }
+            })
+
+        if (email != "" && password != "" && UserName != "" && uri != ""  ) {
+//                Thread.sleep(2000)
 
             //check if the UserName is Already exists
             if (!model.check_if_UserNameIs_exist(UserName)) {
@@ -198,6 +244,10 @@ class RegisterActivity : AppCompatActivity() {
 
                             //send UserInformation to Firebase
                             model.uploadUserInfo(UserInformation(UserName, email, uri))
+
+
+
+                            model.uploadUserAndToken(UserName ,Token.toString() )
                         }
 
                     })
@@ -208,6 +258,9 @@ class RegisterActivity : AppCompatActivity() {
         }
 
     }
+
+
+
 
 
 }

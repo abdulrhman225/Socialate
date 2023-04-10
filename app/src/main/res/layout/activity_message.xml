@@ -52,6 +52,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <EditText
+
         android:id="@+id/Message_message"
         android:layout_width="@dimen/_265sdp"
         android:layout_height="wrap_content"

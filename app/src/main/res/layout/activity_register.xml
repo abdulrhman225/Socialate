@@ -6,52 +6,110 @@
     android:layout_height="match_parent"
     tools:context="com.example.postappwithkolin.UI.RegisterActivity"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/prime"
+        android:elevation="@dimen/_10sdp"
+        >
+
+        <ImageButton
+            android:id="@+id/Register_fallBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_keyboard_return_24"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:backgroundTint="@color/prime"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register Page"
+            android:textSize="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:layout_margin="@dimen/_10sdp"
+            />
+    </LinearLayout>
+
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/Register_UserPhoto"
-        android:layout_width= "@dimen/_200sdp"
+        android:layout_width= "match_parent"
         android:layout_height="@dimen/_200sdp"
-        android:src="@drawable/ic_baseline_person_24"
+        android:src="@drawable/user"
         android:layout_margin="@dimen/_10sdp"/>
 
 
 
-    <EditText
-        android:id="@+id/Register_UserName"
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="User Name"
-        android:padding="@dimen/_15sdp"
-        android:layout_margin="@dimen/_10sdp"
-        />
-    <EditText
-        android:id="@+id/Register_Email"
+        android:padding="@dimen/_10sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Register_UserName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:padding="@dimen/_15sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:inputType="textEmailAddress"
-        />
-    <EditText
-        android:id="@+id/Register_Password"
+        android:padding="@dimen/_10sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Register_Email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:padding="@dimen/_15sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:inputType="textPassword"
-        />
+        android:padding="@dimen/_10sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Register_Password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:inputType="textPassword"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/Register_register"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
         android:textAllCaps="false"
-        android:layout_margin="@dimen/_10sdp"/>
+        android:layout_margin="@dimen/_10sdp"
+        />
 
 
 

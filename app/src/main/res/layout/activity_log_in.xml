@@ -4,60 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.postappwithkolin.UI.LogInActivity"
-    android:gravity="center_horizontal">
+    tools:context="com.example.postappwithkolin.UI.LogInActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/prime"
+        android:elevation="@dimen/_10sdp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LongIn Page"
+            android:textSize="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:layout_margin="@dimen/_10sdp"
+            />
+
+
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:src="@drawable/big_family"/>
+        android:src="@drawable/big_family"
+        app:srcCompat="@drawable/socialate" />
 
-    <EditText
-        android:id="@+id/Login_Email"
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:padding="@dimen/_15sdp"
-        android:inputType="textEmailAddress"
         android:hint="Email"
-        />
+        android:padding="@dimen/_10sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Login_Email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:id="@+id/Login_Password"
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:padding="@dimen/_15sdp"
         android:hint="Password"
-        android:inputType="textPassword"
-        />
+        android:padding="@dimen/_10sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Login_Password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:inputType="textPassword"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <TextView
         android:id="@+id/Login_GoToRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create New Account"
         android:layout_gravity="end"
         android:layout_margin="@dimen/_10sdp"
-        android:textColor="@color/Blue"
-        />
+        android:text="Create New Account"
+        android:textColor="@color/Blue" />
 
     <Button
         android:id="@+id/Login_login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:text="Login"
-        android:padding="@dimen/_10sdp"
         android:layout_margin="@dimen/_10sdp"
-        />
-
+        android:padding="@dimen/_10sdp"
+        android:text="Login"
+        android:textAllCaps="false" />
 
 
 </LinearLayout>

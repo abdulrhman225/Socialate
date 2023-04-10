@@ -10,14 +10,16 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.postappwithkolin.R
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 
 class LogInActivity : AppCompatActivity() {
 
-    lateinit var et_Email: EditText
-    lateinit var et_Password: EditText
+    lateinit var et_Email: TextInputEditText
+    lateinit var et_Password: TextInputEditText
     lateinit var tv_Go_To_Register: TextView
     lateinit var btn_login: Button
 

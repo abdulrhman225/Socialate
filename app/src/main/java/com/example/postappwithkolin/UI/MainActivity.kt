@@ -2,43 +2,56 @@ package com.example.postappwithkolin.UI
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.postappwithkolin.Model.UserPost
 import com.example.postappwithkolin.Model.Post_recycler
+import com.example.postappwithkolin.Model.UserInformation
+import com.example.postappwithkolin.Model.UserPost
+import com.example.postappwithkolin.Model.users_rv
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
+import com.example.postappwithkolin.UI.Fragment.HomeFragment
+import com.example.postappwithkolin.UI.Fragment.ProfileFragment
+import com.example.postappwithkolin.UI.Fragment.SearchFragment
+import com.example.postappwithkolin.UI.Fragment.SettingFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
-class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
+class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
+    SearchFragment.onChangeListener1, users_rv.OnCompleteListener,
+    SearchFragment.onCompleteListener1, SettingFragment.onLogOutClickListener,
+    SettingFragment.onChangeUserNameClickListener,
+    SettingFragment.onChangeProfileImageClickListener {
 
 
-    lateinit var iv_UserImage: ImageView
-    lateinit var tv_UserName: TextView
-    lateinit var main_rv: RecyclerView
+    //    lateinit var iv_UserImage: ImageView
+//    lateinit var tv_UserName: TextView
+//    lateinit var main_rv: RecyclerView
     lateinit var FAB_newPost: FloatingActionButton
-    lateinit var toobar :Toolbar
-    lateinit var swipe:SwipeRefreshLayout
+
+    //    lateinit var swipe:SwipeRefreshLayout
+    lateinit var bottomNavigation: BottomNavigationView
+    lateinit var Frame: FrameLayout
 
 
     //Initialize FireBaseAuth
@@ -46,13 +59,18 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
 
     //Initialize RecyclerView
     var rv: Post_recycler? = null
+    var Rv: users_rv? = null
 
+    companion object {
+        var userName: String? = null
 
-    var userName: String? = null
-    var userPhoto: String? = null
+        var userPhoto: String? = null
+    }
+
     var userPhotoInPost: String? = null
 
     var posts: ArrayList<UserPost> = ArrayList()
+    var newList: ArrayList<UserInformation> = ArrayList()
 
 
     //Initialize SAGDataFromFireBase
@@ -63,15 +81,26 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
         setContentView(R.layout.activity_main)
 
         //Initialize Views
-        iv_UserImage = findViewById(R.id.main_IV_userImage)
-        tv_UserName = findViewById(R.id.main_UserName)
-        main_rv = findViewById(R.id.Main_Recycler)
+//        iv_UserImage = findViewById(R.id.main_IV_userImage)
+//        tv_UserName = findViewById(R.id.main_UserName)
+//        main_rv = findViewById(R.id.Main_Recycler)
         FAB_newPost = findViewById(R.id.main_FLB)
-        swipe = findViewById(R.id.MainSwipe)
-        toobar = findViewById(R.id.mainToolbar)
+//        swipe = findViewById(R.id.MainSwipe)
+        bottomNavigation = findViewById(R.id.Main_bottomNavigation)
+        Frame = findViewById(R.id.Main_frame)
 
 
-        setSupportActionBar(toobar)
+
+
+        bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> replaceFragment(HomeFragment())
+                R.id.search -> replaceFragment(SearchFragment())
+                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.setting -> replaceFragment(SettingFragment())
+            }
+            true
+        })
 
 
         //put UserName And UserPhoto in the MainActivity
@@ -79,49 +108,49 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
 
         //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
-        updateData()
+//        updateData()
 
 
-
-
-        //Going to NewPostActivity
+//        Going to NewPostActivity
         FAB_newPost.setOnClickListener(View.OnClickListener {
             val intent = Intent(applicationContext, NewPostActivity::class.java)
-            intent.putExtra("userName", tv_UserName.text)
-            intent.putExtra("userPhoto", userPhotoInPost)
+            intent.putExtra("userName", mAuth.currentUser!!.displayName)
+            intent.putExtra("userPhoto", mAuth.currentUser!!.photoUrl)
             startActivity(intent)
         })
 
         //swipe to update data
-        swipe.setOnRefreshListener {
-            updateData()
-            swipe.isRefreshing = false
-        }
+//        swipe.setOnRefreshListener {
+//            updateData()
+//            swipe.isRefreshing = false
+//        }
 
     }
 
 
-    //Create Option Menu
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = MenuInflater(this)
-        inflater.inflate(R.menu.log_out_menu, menu)
-        return true
-    }
+//    //Create Option Menu
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        val inflater: MenuInflater = MenuInflater(this)
+//        inflater.inflate(R.menu.log_out_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//
+//    }
+
 
     //Initialize menuItem for signOut
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.menu_Logout -> {
-                mAuth.signOut()
-                val intent = Intent(this, LogInActivity::class.java)
-                startActivity(intent)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//
+//        when (item.itemId) {
+//            R.id.menu_Logout -> {
+//                mAuth.signOut()
+//                val intent = Intent(this, LogInActivity::class.java)
+//                startActivity(intent)
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
+//
+//
     //Checking If there is User Or Not if Not Her Will Send Me To LoginActivity
     override fun onStart() {
         super.onStart()
@@ -129,10 +158,8 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
             var intent = Intent(applicationContext, LogInActivity::class.java)
             startActivity(intent)
         } else {
-            //put UserName and UserPhoto from UserInformation
-            tv_UserName.text = mAuth.currentUser!!.displayName
-            Picasso.get().load(mAuth.currentUser!!.photoUrl).into(iv_UserImage)
             userPhotoInPost = mAuth.currentUser!!.photoUrl.toString()
+            replaceFragment(HomeFragment())
         }
     }
 
@@ -142,44 +169,72 @@ class MainActivity : AppCompatActivity(), Post_recycler.OnItemClickListener {
         val intent = getIntent()
         userName = intent.getStringExtra("userName")
         userPhoto = intent.getStringExtra("userPhoto")
-        if (userName != null && userPhoto != null) {
-            val user = mAuth.currentUser
-            val updateProfile = userProfileChangeRequest {
-                setDisplayName(userName)
-                setPhotoUri(Uri.parse(userPhoto))
 
-            }
-            user!!.updateProfile(updateProfile).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    tv_UserName.text = mAuth.currentUser!!.displayName.toString()
-                    Picasso.get().load(userPhoto).into(iv_UserImage)
-                    userPhotoInPost = userPhoto
-                }
-
-
-            }
-        }
     }
 
-    //send userName and userPhoto when the user click on recyclerView item
-    override fun onItemClick(position: Int) {
-        val user: UserPost = posts[position]
+
+    fun replaceFragment(fragment: Fragment?) {
+        val manager = supportFragmentManager
+        val transaction = manager.beginTransaction()
+        transaction.replace(R.id.Main_frame, fragment!!)
+        transaction.commit()
+    }
+
+    override fun onItemClick1(Position: Int) {
+        val user: UserPost = HomeFragment.posts[Position]
         val intent = Intent(this, profileActivity::class.java)
         intent.putExtra("UserName", user.UserName)
         intent.putExtra("UserPhoto", user.UserPhoto)
         startActivity(intent)
-
-
     }
-    fun updateData(){
-        model.getPosts()
-        model.mutable.observe(this, Observer {
-            posts.addAll(it)
-            rv = Post_recycler(it, this)
-            main_rv.adapter = rv
-            main_rv.layoutManager = LinearLayoutManager(this)
-            main_rv.setHasFixedSize(true)
-        })
+
+    override fun onChange(newText: String?, informations: java.util.ArrayList<UserInformation>?) {
+        newList.clear()
+        for (information: UserInformation in informations!!) {
+            if (information.UserName.lowercase().contains(newText!!.lowercase())) {
+                newList.add(information)
+            }
+        }
+        if (newList.isEmpty()) {
+            Toast.makeText(
+                applicationContext,
+                "There is no user Name Like " + newText,
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Rv = users_rv(newList, this)
+            SearchFragment.recyclerView.adapter = Rv
+            SearchFragment.recyclerView.layoutManager = LinearLayoutManager(this)
+            SearchFragment.recyclerView.setHasFixedSize(true)
+        }
+    }
+
+    override fun onComplete(position: Int) {
+        val users: UserInformation = newList[position]
+        val intent = Intent(this, profileActivity::class.java)
+        intent.putExtra("UserName", users.UserName)
+        intent.putExtra("UserPhoto", users.UserPhoto)
+        startActivity(intent)
+    }
+
+    override fun onComplete(position: Int, informations: java.util.ArrayList<UserInformation>?) {
+        val users: UserInformation = informations!![position]
+        val intent = Intent(this, profileActivity::class.java)
+        intent.putExtra("UserName", users.UserName)
+        intent.putExtra("UserPhoto", users.UserPhoto)
+        startActivity(intent)
+    }
+
+    override fun onChangeUserName(UserName: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onChangeProfileImage() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLogOut() {
+        TODO("Not yet implemented")
     }
 
 

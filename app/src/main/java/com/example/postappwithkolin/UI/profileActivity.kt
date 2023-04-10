@@ -1,9 +1,11 @@
 package com.example.postappwithkolin.UI
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,16 +16,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.Model.Post_recycler
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
+import com.example.postappwithkolin.UI.Fragment.ProfileFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
 
     lateinit var iv_profileImage: ImageView
     lateinit var tv_userName: TextView
     lateinit var rv_posts: RecyclerView
-    lateinit var btn_sendMessage:ImageButton
+    lateinit var btn_sendMessage: Button
+    lateinit var btn_fallBack:ImageButton
 
     lateinit var rv :Post_recycler
 
@@ -34,6 +39,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
 
     var model:SAGDataFromDataBase = SAGDataFromDataBase()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -43,6 +49,13 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
         tv_userName = findViewById(R.id.profileUserName)
         rv_posts = findViewById(R.id.profilePosts)
         btn_sendMessage = findViewById(R.id.profile_send)
+        btn_fallBack = findViewById(R.id.Profile_fallBack)
+
+
+        btn_fallBack.setOnClickListener(View.OnClickListener {
+            intent = Intent(this , MainActivity::class.java)
+            startActivity(intent)
+        })
 
 
 
@@ -80,8 +93,10 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
     }
 
     override fun onItemClick(position: Int) {
-        TODO("Not yet implemented")
     }
+
+
+
 
 
 

@@ -5,14 +5,37 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_3"
+        android:icon="@mipmap/ic_launcher_5"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_3_round"
+        android:roundIcon="@mipmap/ic_launcher_5_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PostAppWithKolin">
+
+<!--        <service-->
+<!--            android:name=".java.MyFirebaseMessagingService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_baseline_message_24" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/teal_700" />
+
+
+
+
         <activity
             android:name=".UI.MessageActivity"
             android:exported="false" />

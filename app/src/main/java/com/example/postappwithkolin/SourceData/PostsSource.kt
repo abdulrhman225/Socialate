@@ -68,9 +68,8 @@ class SAGDataFromDataBase : ViewModel() {
     }
 
 
-
     //get All UserInformation from Firebase
-    fun getUsers() {
+    fun getAllUsers() {
         mRef.child("User").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
                 posts.clear()
@@ -95,6 +94,7 @@ class SAGDataFromDataBase : ViewModel() {
                     }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.d("TAG", "onCancelled: " + error.message)
             }
@@ -103,18 +103,14 @@ class SAGDataFromDataBase : ViewModel() {
 
 
     //check if the UserName is Already exists
-    fun check_if_UserNameIs_exist(UserName:String):Boolean{
-        for (user:UserInformation in Users){
-            if (UserName == user.UserName){
+    fun check_if_UserNameIs_exist(UserName: String): Boolean {
+        for (user: UserInformation in Users) {
+            if (UserName == user.UserName) {
                 return true
             }
         }
         return false
     }
-
-
-
-
 
 
     //upload all Information from UserPost Data to FireBase
@@ -135,7 +131,7 @@ class SAGDataFromDataBase : ViewModel() {
 
 
     //get All Data from firebase and put it in MutableLiveData
-    fun getPosts() {
+    fun getPost() {
         mRef.child("Posts").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
                 posts.clear()
@@ -148,7 +144,7 @@ class SAGDataFromDataBase : ViewModel() {
                             snap.child("postComment").getValue().toString()
                         PostImage_Post =
                             snap.child("PostImage").getValue().toString()
-                        UserPhoto =
+                        UserPhoto_Post =
                             snap.child("UserPhoto").getValue().toString()
 
 
@@ -201,6 +197,20 @@ class SAGDataFromDataBase : ViewModel() {
             }
         })
 
+    }
+
+
+    fun uploadUserAndToken(UserName: String, Token: String) {
+        val TokenKey: String = mRef.child("Token").push().key.toString()
+        mRef.child("Token").child(TokenKey).push()
+
+        val map: Map<String, Any?>
+
+        map = mapOf(
+            "UserName" to UserName,
+            "Token" to Token
+        )
+        mRef.child("Token").child(TokenKey).setValue(map)
     }
 
 
