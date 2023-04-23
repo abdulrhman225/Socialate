@@ -25,4 +25,9 @@
         <item name="boxStrokeWidth">@dimen/_2sdp</item>
         <item name="hintTextColor">@color/prime</item>
     </style>
+
+    <style name="editTextStyle" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="civ_border_color">@color/white</item>
+        <item name="borderRound" >@dimen/_5sdp</item>
+    </style>
 </resources>

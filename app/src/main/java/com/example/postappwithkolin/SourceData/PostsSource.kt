@@ -1,5 +1,6 @@
 package com.example.postappwithkolin.SourceData
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import android.view.animation.AnimationUtils
@@ -12,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.disklrucache.DiskLruCache
 import com.example.postappwithkolin.Model.UserInformation
 import com.example.postappwithkolin.Model.UserPost
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,15 +34,21 @@ class SAGDataFromDataBase : ViewModel() {
     val db = Firebase.database
     val mRef = db.reference
 
+    val mAuth = FirebaseAuth.getInstance()
+
     lateinit var userName_Post: String
     lateinit var comment_Post: String
     lateinit var PostImage_Post: String
     lateinit var UserPhoto_Post: String
+    lateinit var userkey :String
 
 
     lateinit var userName: String
+    lateinit var PostuserName: String
     lateinit var email: String
     lateinit var UserPhoto: String
+    lateinit var PostUserPhoto: String
+
 
 
     val posts: ArrayList<UserPost> = ArrayList()
@@ -61,10 +69,116 @@ class SAGDataFromDataBase : ViewModel() {
         map = mapOf(
             "userName" to userInfo.UserName,
             "email" to userInfo.email,
-            "UserPhoto" to userInfo.UserPhoto
+            "UserPhoto" to userInfo.UserPhoto,
+            "userKey" to UserKey
         )
 
         mRef.child("User").child(UserKey).setValue(map)
+    }
+
+    //this function is to update UserName in the firebaseDatabase
+    fun updateUserName(Name:String , newName:String){
+        mRef.child("User").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    for (snap: DataSnapshot in snapshot.children) {
+                        userName =
+                            snap.child("userName").getValue().toString()
+                        userkey =
+                            snap.child("userKey").getValue().toString()
+
+                        if(userName.equals(Name)) {
+                            mRef.child("User").child(userkey).child("userName").setValue(newName)
+                            break
+                        }
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "onCancelled: " + error.message)
+            }
+        })
+
+
+        mRef.child("Posts").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    for (snap: DataSnapshot in snapshot.children) {
+                        PostuserName =
+                            snap.child("userName").getValue().toString()
+                        userkey =
+                            snap.child("PostKey").getValue().toString()
+
+                        if(PostuserName.equals(Name)) {
+                            mRef.child("Posts").child(userkey).child("userName").setValue(newName)
+                            break
+                        }
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "onCancelled: " + error.message)
+            }
+        })
+    }
+
+
+
+    //this function is to update UserPhoto in the firebaseDatabase
+    fun updateUserPhoto(UserName:String , NewPhoto:String){
+        mRef.child("User").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    for (snap: DataSnapshot in snapshot.children) {
+                        userName =
+                            snap.child("userName").getValue().toString()
+                        userkey =
+                            snap.child("userKey").getValue().toString()
+
+                        if(userName.equals(UserName)) {
+                            mRef.child("User").child(userkey).child("UserPhoto").setValue(NewPhoto)
+                            break
+                        }
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "onCancelled: " + error.message)
+            }
+        })
+
+        mRef.child("Posts").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(@NonNull snapshot: DataSnapshot) {
+                viewModelScope.launch(Dispatchers.IO) {
+
+                    for (snap: DataSnapshot in snapshot.children) {
+                        userName =
+                            snap.child("userName").getValue().toString()
+                        userkey =
+                            snap.child("PostKey").getValue().toString()
+
+                        if(userName.equals(UserName)) {
+                            mRef.child("Posts").child(userkey).child("UserPhoto").setValue(NewPhoto)
+                            break
+                        }
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TAG", "onCancelled: " + error.message)
+            }
+        })
     }
 
 
@@ -86,7 +200,7 @@ class SAGDataFromDataBase : ViewModel() {
 
 
 
-                        UserInfo = UserInformation(userName, email, UserPhoto)
+                        UserInfo = UserInformation(userName, email, UserPhoto )
                         Users.add(UserInfo)
                     }
                     withContext(Dispatchers.Main) {
@@ -120,10 +234,11 @@ class SAGDataFromDataBase : ViewModel() {
         val map: Map<String, Any?>
 
         map = mapOf(
-            "userName" to userPost.UserName,
+            "userName"    to userPost.UserName,
             "postComment" to userPost.postComment,
-            "PostImage" to userPost.postImage,
-            "UserPhoto" to userPost.UserPhoto
+            "PostImage"   to userPost.postImage,
+            "UserPhoto"   to userPost.UserPhoto,
+            "PostKey"     to PostKey
         )
 
         mRef.child("Posts").child(PostKey).setValue(map)

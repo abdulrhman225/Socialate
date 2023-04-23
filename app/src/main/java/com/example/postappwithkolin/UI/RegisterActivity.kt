@@ -136,7 +136,6 @@ class RegisterActivity : AppCompatActivity() {
 
             //upload Picture
             uploadPicture()
-            //give system time to get the image from firebase
         }
     }
 
@@ -176,7 +175,6 @@ class RegisterActivity : AppCompatActivity() {
 
     //upload Picture to FireBase Storage
     fun uploadPicture() {
-        var imagePath: String? = null
 
         if (uri != null) {
 

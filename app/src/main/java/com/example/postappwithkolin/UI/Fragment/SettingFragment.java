@@ -30,9 +30,9 @@ public class SettingFragment extends Fragment {
     FragmentSettingBinding binding;
     FirebaseAuth mAuth;
 
-    onChangeUserNameClickListener changeUserNameClickListener;
-    onChangeProfileImageClickListener changeProfileImageClickListener;
     onLogOutClickListener logOutClickListener;
+    onChangeUserNameClickListener changeUserNameClickListener;
+    onChangeProfilePhotoClickListener changeProfilePhotoClickListener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,9 +77,9 @@ public class SettingFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        changeUserNameClickListener = (onChangeUserNameClickListener)context;
-        changeProfileImageClickListener = (onChangeProfileImageClickListener) context;
         logOutClickListener = (onLogOutClickListener) context;
+        changeUserNameClickListener = (onChangeUserNameClickListener) context;
+        changeProfilePhotoClickListener = (onChangeProfilePhotoClickListener) context;
     }
 
     @Override
@@ -87,29 +87,33 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        mAuth = FirebaseAuth.getInstance();
 
         putProfileInfo();
 
-        mAuth = FirebaseAuth.getInstance();
+        binding.profileUserName.setText(mAuth.getCurrentUser().getDisplayName());
+        Picasso.get().load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.profilePhoto);
+
+
+
+        binding.fragmentSettingLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOutClickListener.onLogOut();
+            }
+        });
 
         binding.fragmentSettingChangeUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeUserNameClickListener.onChangeUserName(binding.profileUserName.getText().toString());
+                changeUserNameClickListener.changeUserName();
             }
         });
 
         binding.fragmentSettingChangeProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeProfileImageClickListener.onChangeProfileImage();
-            }
-        });
-
-        binding.fragmentSettingLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOutClickListener.onLogOut();
+                changeProfilePhotoClickListener.ChangeProfilePhoto();
             }
         });
 
@@ -137,13 +141,14 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    public interface onChangeUserNameClickListener{
-        void onChangeUserName(String UserName);
-    }
-    public interface onChangeProfileImageClickListener{
-        void onChangeProfileImage();
-    }
+
     public interface onLogOutClickListener{
         void onLogOut();
+    }
+    public interface onChangeUserNameClickListener{
+        void changeUserName();
+    }
+    public interface onChangeProfilePhotoClickListener{
+        void ChangeProfilePhoto();
     }
 }

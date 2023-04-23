@@ -1,39 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_pb"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/post_background"
     tools:context="com.example.postappwithkolin.UI.NewPostActivity">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/NPA_userPhoto"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@drawable/circle_image_background"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
+
+    <TextView
+        android:id="@+id/NPA_UserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_toEndOf="@+id/NPA_userPhoto"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_24sdp"
+        android:fontFamily="@font/user_name_font"/>
+
     <EditText
+        android:layout_below="@id/NPA_userPhoto"
         android:id="@+id/NPA_et_comment"
+        style="@style/editTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/circle_image_background"
         android:hint="Put Your Comment Here "
-        android:padding="@dimen/_15sdp" />
+        android:paddingLeft="@dimen/_15sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:paddingRight="@dimen/_15sdp"
+        android:paddingBottom="@dimen/_10sdp" />
 
     <ImageView
         android:id="@+id/NPA_IV_PostImage"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_300sdp"
+        android:layout_height="@dimen/_256sdp"
         android:layout_margin="@dimen/_10sdp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_person_24"
+        android:layout_below="@+id/NPA_et_comment"
+        android:src="@drawable/new_post"
         />
 
     <Button
         android:id="@+id/NPA_btn_uploadPost"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
-        android:text="Upload Post"
+        android:text="Publish"
         android:textAllCaps="false"
+        android:layout_below="@+id/NPA_IV_PostImage"
+        style="@style/ButtonStyle"
+
         android:padding="@dimen/_10sdp"/>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,16 +1,21 @@
 package com.example.postappwithkolin.UI
 
+import android.content.ContentResolver
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract.Profile
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View.OnClickListener
+import android.webkit.MimeTypeMap
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,31 +33,55 @@ import com.example.postappwithkolin.UI.Fragment.HomeFragment
 import com.example.postappwithkolin.UI.Fragment.ProfileFragment
 import com.example.postappwithkolin.UI.Fragment.SearchFragment
 import com.example.postappwithkolin.UI.Fragment.SettingFragment
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
+import java.util.stream.DoubleStream.builder
 
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     SearchFragment.onChangeListener1, users_rv.OnCompleteListener,
     SearchFragment.onCompleteListener1, SettingFragment.onLogOutClickListener,
     SettingFragment.onChangeUserNameClickListener,
-    SettingFragment.onChangeProfileImageClickListener {
+    SettingFragment.onChangeProfilePhotoClickListener {
 
-
-    //    lateinit var iv_UserImage: ImageView
-//    lateinit var tv_UserName: TextView
-//    lateinit var main_rv: RecyclerView
     lateinit var FAB_newPost: FloatingActionButton
 
-    //    lateinit var swipe:SwipeRefreshLayout
     lateinit var bottomNavigation: BottomNavigationView
     lateinit var Frame: FrameLayout
 
+    val REQ_CODE = 1
+    var uri: Uri? = null
+    lateinit var iv_UserPhoto:ImageView
+
+    //userPhotoPath
+    var ProfilePhoto: String? = null
+
+
+    //Initialize FireBase Storage
+    val storage = Firebase.storage
+    val storageRef = storage.reference
+
+
+
+
+    //change UserName AlertDialog
+    lateinit var builder:AlertDialog.Builder
+    lateinit var dialgo:AlertDialog
+
+    //newPost Alert Dialog
+    lateinit var newBuilder:AlertDialog.Builder
+    lateinit var newDialog:AlertDialog
 
     //Initialize FireBaseAuth
     val mAuth = Firebase.auth
@@ -119,38 +148,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             startActivity(intent)
         })
 
-        //swipe to update data
-//        swipe.setOnRefreshListener {
-//            updateData()
-//            swipe.isRefreshing = false
-//        }
 
     }
 
 
-//    //Create Option Menu
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val inflater: MenuInflater = MenuInflater(this)
-//        inflater.inflate(R.menu.log_out_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//
-//    }
-
-
-    //Initialize menuItem for signOut
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        when (item.itemId) {
-//            R.id.menu_Logout -> {
-//                mAuth.signOut()
-//                val intent = Intent(this, LogInActivity::class.java)
-//                startActivity(intent)
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-//
-//
     //Checking If there is User Or Not if Not Her Will Send Me To LoginActivity
     override fun onStart() {
         super.onStart()
@@ -225,16 +226,141 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         startActivity(intent)
     }
 
-    override fun onChangeUserName(UserName: String?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onChangeProfileImage() {
-        TODO("Not yet implemented")
-    }
 
     override fun onLogOut() {
-        TODO("Not yet implemented")
+        mAuth.signOut()
+        val intent = Intent(this, LogInActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun changeUserName() {
+        val view:View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_chang_user_name , null , false)
+        val et_NewUserName:TextInputEditText = view.findViewById(R.id.ChangeUserName)
+        val btn_cancel: Button = view.findViewById(R.id.custom_dialog_Cancel)
+        val btn_save: Button = view.findViewById(R.id.custom_dialog_changUserName_Save)
+
+        et_NewUserName.setText(mAuth.currentUser!!.displayName)
+        btn_save.setOnClickListener(OnClickListener {
+            if (!model.check_if_UserNameIs_exist(et_NewUserName.text.toString())) {
+                model.updateUserName(mAuth.currentUser!!.displayName.toString() , et_NewUserName.text.toString())
+
+                var profile = userProfileChangeRequest {
+                    displayName = et_NewUserName.text.toString()
+                }
+                mAuth.currentUser!!.updateProfile(profile).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        dialgo.cancel()
+                        replaceFragment(SettingFragment())
+                    }
+                }
+
+            }
+        })
+
+        btn_cancel.setOnClickListener(OnClickListener {
+            dialgo.cancel()
+        })
+
+        builder = AlertDialog.Builder(this).setView(view)
+        dialgo  = builder.create()
+        dialgo.show()
+
+    }
+
+    override fun ChangeProfilePhoto() {
+
+        val view:View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_change_user_photo , null , false)
+        iv_UserPhoto = view.findViewById(R.id.custom_newUserPhoto)
+        val btn_cancel: Button = view.findViewById(R.id.custom_dialog_Cancel)
+        val btn_save: Button = view.findViewById(R.id.custom_dialog_changUserName_Save)
+
+        iv_UserPhoto.setOnClickListener(OnClickListener {
+            pickImage()
+        })
+
+
+        btn_save.setOnClickListener(OnClickListener {
+            model.updateUserPhoto(mAuth.currentUser!!.displayName.toString() , ProfilePhoto!! )
+
+            var profile = userProfileChangeRequest {
+                photoUri = Uri.parse(ProfilePhoto)
+            }
+            mAuth.currentUser!!.updateProfile(profile).addOnCompleteListener {
+                if(it.isSuccessful){
+                    dialgo.cancel()
+                    replaceFragment(SettingFragment())
+                }
+            }
+        })
+
+        btn_cancel.setOnClickListener(OnClickListener {
+            dialgo.cancel()
+        })
+
+        builder = AlertDialog.Builder(this).setView(view)
+        dialgo  = builder.create()
+        dialgo.show()
+    }
+
+
+
+    //Pick Image From Gallery
+    fun pickImage() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        startActivityForResult(intent, REQ_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        replaceFragment(SettingFragment())
+
+        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
+            uri = data!!.data!!
+            Picasso.get().load(uri).into(iv_UserPhoto)
+
+            //upload Picture
+            uploadPicture()
+        }
+    }
+
+
+    //getFile Extension like (jpg , png)
+    fun getFileExtension(uri: Uri): String {
+        val cR: ContentResolver = getContentResolver();
+        val mime: MimeTypeMap = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri))!!;
+    }
+
+    //upload Picture to FireBase Storage
+    fun uploadPicture() {
+
+        if (uri != null) {
+
+            val storageReference: StorageReference = storageRef.child(
+                "images/${System.currentTimeMillis()}.${
+                    getFileExtension(
+                        uri!!
+                    )
+                }"
+            )
+            var dialog = android.app.AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+            var dia = dialog.create()
+            dia.show()
+
+            storageReference.putFile(uri!!).addOnSuccessListener(OnSuccessListener {
+                storageReference.downloadUrl.addOnSuccessListener {
+                    //get photo url
+                    ProfilePhoto = it.toString()
+                    Log.d("TAG", "uploadPicture: " + it.toString())
+                    dia.dismiss()
+                }
+
+            })
+
+        }
     }
 
 

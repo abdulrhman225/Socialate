@@ -61,8 +61,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
                 <TextView
-                    android:id="@+id/fragment_setting_changeUserName"
+                    android:id="@+id/fragment_setting_ChangeUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_9sdp"
@@ -78,19 +79,18 @@
                     android:textSize="@dimen/_35sdp" />
 
                 <TextView
-                    android:id="@+id/fragment_setting_changeProfileImage"
+                    android:id="@+id/fragment_setting_ChangeProfileImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/fragment_setting_changeUserName"
-                    android:layout_margin="@dimen/_9sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_below="@id/fragment_setting_ChangeUserName"
+                    android:layout_marginStart="@dimen/_9sdp"
+                    android:layout_marginTop="@dimen/_9sdp"
+                    android:layout_marginEnd="@dimen/_9sdp"
+                    android:layout_marginBottom="@dimen/_9sdp"
                     android:background="@drawable/post_background"
                     android:fontFamily="@font/arabic_typesetting"
                     android:padding="@dimen/_10sdp"
-                    android:text="Change Profile Image"
+                    android:text="Change User Photo"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_35sdp" />
 
@@ -98,7 +98,6 @@
                     android:id="@+id/fragment_setting_LogOut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/fragment_setting_changeProfileImage"
                     android:layout_margin="@dimen/_9sdp"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"
@@ -108,6 +107,7 @@
                     android:fontFamily="@font/arabic_typesetting"
                     android:padding="@dimen/_10sdp"
                     android:text="LogOut"
+                    android:layout_below="@id/fragment_setting_ChangeProfileImage"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_35sdp" />
 
