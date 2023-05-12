@@ -16,6 +16,7 @@ import com.example.postappwithkolin.SourceData.MessagesSource
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.*
 
 class MessageActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class MessageActivity : AppCompatActivity() {
     lateinit var UserPhoto:ImageView
     lateinit var MessagesList :RecyclerView
     lateinit var et_writeMessage :EditText
-    lateinit var SendMessage :ImageButton
+    lateinit var SendMessage :CircleImageView
 
     var UserNameAccepter :String ?= null
     var UserNameSender :String ?= null

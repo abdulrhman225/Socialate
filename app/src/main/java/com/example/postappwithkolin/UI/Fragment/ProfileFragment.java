@@ -105,6 +105,11 @@ public class ProfileFragment extends Fragment {
                     public void onItemClick(int position) {
 
                     }
+                }, new Post_recycler.onCommentButtonClick() {
+                    @Override
+                    public void onCommentClick(int position) {
+
+                    }
                 });
                 binding.profilePosts.setAdapter(rv);
                 binding.profilePosts.setLayoutManager(new LinearLayoutManager(getContext()));

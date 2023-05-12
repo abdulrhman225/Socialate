@@ -3,14 +3,18 @@ package com.example.postappwithkolin.Model
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.R
 import com.squareup.picasso.Picasso
 
-class Post_recycler(private val list: ArrayList<UserPost>, private val listener: OnItemClickListener) :
+class Post_recycler(private val list: ArrayList<UserPost>, private val listener: OnItemClickListener ,
+private val listener1 : onCommentButtonClick) :
     RecyclerView.Adapter<Post_recycler.viewHolder>() {
+
+
 
 
     inner class viewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -19,22 +23,32 @@ class Post_recycler(private val list: ArrayList<UserPost>, private val listener:
         var PostComment: TextView
         var postImage: ImageView
         var UserPhoto: ImageView
+        var Comment_post: Button
 
         init {
             tv_userName = itemView.findViewById(R.id.custom_UserName)
             PostComment = itemView.findViewById(R.id.custom_PostComment)
             postImage = itemView.findViewById(R.id.custom_PostImage)
             UserPhoto = itemView.findViewById(R.id.custom_UserPhoto)
+            Comment_post = itemView.findViewById(R.id.custom_Comment)
 
             tv_userName.setOnClickListener(this)
+            Comment_post.setOnClickListener(this)
+
 
 
         }
 
         override fun onClick(p0: View?) {
-            val position: Int = adapterPosition
-            listener.onItemClick(position)
+            val position  = adapterPosition
+            if (p0!!.id == R.id.custom_UserName)
+                listener.onItemClick(position)
+
+            else if (p0.id == R.id.custom_Comment){
+                listener1.onCommentClick(position)
+            }
         }
+
     }
 
 
@@ -69,6 +83,10 @@ class Post_recycler(private val list: ArrayList<UserPost>, private val listener:
     interface OnItemClickListener {
         fun onItemClick(position: Int)
 
+    }
+
+    interface onCommentButtonClick{
+        fun onCommentClick(position:Int)
     }
 
 

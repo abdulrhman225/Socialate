@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     SearchFragment.onChangeListener1, users_rv.OnCompleteListener,
     SearchFragment.onCompleteListener1, SettingFragment.onLogOutClickListener,
     SettingFragment.onChangeUserNameClickListener,
-    SettingFragment.onChangeProfilePhotoClickListener {
+    SettingFragment.onChangeProfilePhotoClickListener , HomeFragment.onCommentClick{
 
     lateinit var FAB_newPost: FloatingActionButton
 
@@ -110,13 +110,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         setContentView(R.layout.activity_main)
 
         //Initialize Views
-//        iv_UserImage = findViewById(R.id.main_IV_userImage)
-//        tv_UserName = findViewById(R.id.main_UserName)
-//        main_rv = findViewById(R.id.Main_Recycler)
-        FAB_newPost = findViewById(R.id.main_FLB)
-//        swipe = findViewById(R.id.MainSwipe)
         bottomNavigation = findViewById(R.id.Main_bottomNavigation)
         Frame = findViewById(R.id.Main_frame)
+        FAB_newPost = findViewById(R.id.main_FLB)
 
 
 
@@ -137,8 +133,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
         //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
-//        updateData()
 
+        model.getPost()
+        model.mutable.observe(this , Observer {
+            posts.clear()
+            posts.addAll(it)
+        } )
 
 //        Going to NewPostActivity
         FAB_newPost.setOnClickListener(View.OnClickListener {
@@ -315,11 +315,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        replaceFragment(SettingFragment())
 
         if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
             uri = data!!.data!!
             Picasso.get().load(uri).into(iv_UserPhoto)
+
+            replaceFragment(SettingFragment())
+
 
             //upload Picture
             uploadPicture()
@@ -361,6 +363,24 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             })
 
         }
+    }
+
+    override fun onCommentclick(position: Int) {
+
+        val intent = Intent(this , CommentActivity::class.java)
+
+        val userName   :String = posts.get(position).UserName
+        val userPhoto  :String = posts.get(position).UserPhoto
+        val postImage  :String = posts.get(position).postImage
+        val postComment:String = posts.get(position).postComment
+
+        intent.putExtra("UserName"    , userName)
+        intent.putExtra("UserPhoto"   , userPhoto)
+        intent.putExtra("postImage"   , postImage)
+        intent.putExtra("postComment" , postComment)
+        intent.putExtra("position" , position)
+
+        startActivity(intent)
     }
 
 

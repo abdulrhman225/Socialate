@@ -22,7 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
-class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
+class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , Post_recycler.onCommentButtonClick{
 
     lateinit var iv_profileImage: ImageView
     lateinit var tv_userName: TextView
@@ -75,7 +75,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
 
         //observer to get data that have the same UserName
         model.mutable.observe(this , Observer {
-            rv = Post_recycler(it , this)
+            rv = Post_recycler(it , this , this)
             rv_posts.adapter = rv
             rv_posts.layoutManager = LinearLayoutManager(this)
             rv_posts.setHasFixedSize(true)
@@ -95,11 +95,8 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener{
     override fun onItemClick(position: Int) {
     }
 
-
-
-
-
-
+    override fun onCommentClick(position: Int) {
+    }
 
 
 }

@@ -3,23 +3,18 @@ package com.example.postappwithkolin.UI.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.example.postappwithkolin.Model.Post_recycler;
 import com.example.postappwithkolin.Model.UserPost;
-import com.example.postappwithkolin.R;
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase;
 import com.example.postappwithkolin.UI.MainActivity;
 import com.example.postappwithkolin.databinding.FragmentHomeBinding;
@@ -47,6 +42,7 @@ public class HomeFragment extends Fragment {
     Post_recycler rv ;
 
     OnItemClickListener1 onItemClickListener1;
+    onCommentClick commentClick;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,6 +79,7 @@ public class HomeFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         onItemClickListener1 = (OnItemClickListener1) context;
+        commentClick = (onCommentClick) context;
     }
 
     @Override
@@ -146,6 +143,11 @@ public class HomeFragment extends Fragment {
                     public void onItemClick(int position) {
                         onItemClickListener1.onItemClick1(position);
                     }
+                }, new Post_recycler.onCommentButtonClick() {
+                    @Override
+                    public void onCommentClick(int position) {
+                        commentClick.onCommentclick(position);
+                    }
                 });
                 binding.MainRecycler.setAdapter(rv);
                 binding.MainRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -157,5 +159,9 @@ public class HomeFragment extends Fragment {
 
     public interface OnItemClickListener1{
         void onItemClick1(int position);
+    }
+
+    public interface onCommentClick{
+        void onCommentclick(int position);
     }
 }

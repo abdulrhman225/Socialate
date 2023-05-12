@@ -1,69 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.MessageActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/UserInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/prime"
+        android:padding="@dimen/_5sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/MessageUserPhoto"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_10sdp"
-                android:src="@drawable/ic_baseline_person_24" />
+                android:src="@drawable/user" />
 
             <TextView
                 android:id="@+id/Message_UserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:text="TextView"
-                android:textSize="@dimen/_30sdp"
-                android:textColor="#000000"
+                android:textSize="@dimen/_24sdp"
+                android:textColor="@color/white"
                 android:fontFamily="@font/user_name_font"
+                android:layout_toRightOf="@+id/MessageUserPhoto"
                 />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+    </RelativeLayout>
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Message_List"
             android:layout_width="match_parent"
+            android:layout_below="@+id/UserInformation"
             android:layout_height="match_parent" />
 
 
-    </androidx.core.widget.NestedScrollView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
     <EditText
 
         android:id="@+id/Message_message"
         android:layout_width="@dimen/_265sdp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:hint="Enter The Message Here"
-        android:padding="@dimen/_20sdp" />
+        android:textColorHint="@color/white"
+        android:background="@drawable/post_background"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/_5sdp"
+        style="@style/editTextStyle"
+        android:padding="@dimen/_14sdp" />
 
-    <ImageButton
-        android:id="@+id/Message_send"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_58sdp"
-        android:layout_gravity="bottom|right"
-        android:src="@drawable/ic_baseline_send_24" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/Message_send"
+            android:layout_width="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/Message_message"
+            android:background="@drawable/post_background"
+            android:src="@drawable/ic_baseline_send_24" />
+    </RelativeLayout>
+
+</RelativeLayout>
