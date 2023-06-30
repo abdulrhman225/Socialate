@@ -2,6 +2,8 @@ package com.example.postappwithkolin.UI
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -17,6 +19,7 @@ import com.example.postappwithkolin.Model.Post_recycler
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
 import com.example.postappwithkolin.UI.Fragment.ProfileFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
@@ -32,7 +35,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
 
     lateinit var rv :Post_recycler
 
-    var mAuth = Firebase.auth
+    var mAuth = FirebaseAuth.getInstance()
 
     var userName:String ?=null
     var userPhoto:String?=null
@@ -61,12 +64,14 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
 
 
         //get userName and UserPhoto from mainActivity a
-        val intent = intent
-        userName = intent.getStringExtra("UserName")
-        userPhoto = intent.getStringExtra("UserPhoto")
+        val int= intent
+        userName = int.getStringExtra("UserName")
+        userPhoto = int.getStringExtra("UserPhoto")
         tv_userName.text = userName
-        Picasso.get().load(userPhoto).into(iv_profileImage)
+        Picasso.get().load(Uri.parse(userPhoto)).into(iv_profileImage)
 
+        if(userName == mAuth.currentUser!!.displayName)
+            btn_sendMessage.visibility = View.GONE
 
 
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)

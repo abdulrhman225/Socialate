@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -225,7 +226,6 @@ class RegisterActivity : AppCompatActivity() {
             })
 
         if (email != "" && password != "" && UserName != "" && uri != ""  ) {
-//                Thread.sleep(2000)
 
             //check if the UserName is Already exists
             if (!model.check_if_UserNameIs_exist(UserName)) {
@@ -235,10 +235,18 @@ class RegisterActivity : AppCompatActivity() {
                     OnCompleteListener {
                         if (it.isSuccessful) {
                             //set UserName and UserPhoto to MainActivity
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.putExtra("userName", UserName)
-                            intent.putExtra("userPhoto", userPhoto)
-                            startActivity(intent)
+                            val user = mAuth.currentUser
+                            val updateProfile = UserProfileChangeRequest.Builder().setDisplayName(
+                                UserName
+                            )
+                                .setPhotoUri(Uri.parse(userPhoto)).build()
+
+                            user!!.updateProfile(updateProfile).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
 
                             //send UserInformation to Firebase
                             model.uploadUserInfo(UserInformation(UserName, email, uri))

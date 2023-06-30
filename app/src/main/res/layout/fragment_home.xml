@@ -8,8 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/PersonImageAndUserName"
@@ -23,9 +22,9 @@
                 android:id="@+id/main_IV_userImage"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/circle_image_background"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_10sdp"
+                android:background="@drawable/circle_image_background"
                 android:src="@drawable/ic_baseline_person_24" />
 
 
@@ -46,20 +45,12 @@
         </RelativeLayout>
 
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/MainSwipe"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Main_Recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/PersonImageAndUserName">
+            android:layout_below="@+id/PersonImageAndUserName" />
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Main_Recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/main_IV_userImage" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </RelativeLayout>
 </FrameLayout>

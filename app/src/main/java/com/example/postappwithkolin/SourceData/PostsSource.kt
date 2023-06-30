@@ -272,6 +272,8 @@ class SAGDataFromDataBase : ViewModel() {
 
     //check if the UserName is Already exists
     fun check_if_UserNameIs_exist(UserName: String): Boolean {
+
+        getAllUsers()
         for (user: UserInformation in Users) {
             if (UserName == user.UserName) {
                 return true
@@ -305,16 +307,17 @@ class SAGDataFromDataBase : ViewModel() {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
                 posts.clear()
                 viewModelScope.launch(Dispatchers.IO) {
+                    var it: List<DataSnapshot> = snapshot.children.toList()
 
-                    for (snap: DataSnapshot in snapshot.children) {
+                    for (n in it.size-1 downTo 0) {
                         userName_Post =
-                            snap.child("userName").getValue().toString()
+                            it.get(n).child("userName").getValue().toString()
                         comment_Post =
-                            snap.child("postComment").getValue().toString()
+                            it.get(n).child("postComment").getValue().toString()
                         PostImage_Post =
-                            snap.child("PostImage").getValue().toString()
+                            it.get(n).child("PostImage").getValue().toString()
                         UserPhoto_Post =
-                            snap.child("UserPhoto").getValue().toString()
+                            it.get(n).child("UserPhoto").getValue().toString()
 
 
 
@@ -377,7 +380,8 @@ class SAGDataFromDataBase : ViewModel() {
 
         map = mapOf(
             "UserName" to UserName,
-            "Token" to Token
+            "Token" to Token,
+            "TokenKey" to TokenKey
         )
         mRef.child("Token").child(TokenKey).setValue(map)
     }

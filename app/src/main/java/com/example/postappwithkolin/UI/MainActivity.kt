@@ -1,16 +1,11 @@
 package com.example.postappwithkolin.UI
 
 import android.content.ContentResolver
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
 import android.webkit.MimeTypeMap
@@ -21,8 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.postappwithkolin.Model.Post_recycler
 import com.example.postappwithkolin.Model.UserInformation
 import com.example.postappwithkolin.Model.UserPost
@@ -45,15 +38,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
-import java.util.stream.DoubleStream.builder
 
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     SearchFragment.onChangeListener1, users_rv.OnCompleteListener,
     SearchFragment.onCompleteListener1, SettingFragment.onLogOutClickListener,
     SettingFragment.onChangeUserNameClickListener,
-    SettingFragment.onChangeProfilePhotoClickListener , HomeFragment.onCommentClick{
+    SettingFragment.onChangeProfilePhotoClickListener, HomeFragment.onCommentClick {
 
     lateinit var FAB_newPost: FloatingActionButton
 
@@ -62,7 +53,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
     val REQ_CODE = 1
     var uri: Uri? = null
-    lateinit var iv_UserPhoto:ImageView
+    lateinit var iv_UserPhoto: ImageView
 
     //userPhotoPath
     var ProfilePhoto: String? = null
@@ -73,15 +64,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     val storageRef = storage.reference
 
 
-
-
     //change UserName AlertDialog
-    lateinit var builder:AlertDialog.Builder
-    lateinit var dialgo:AlertDialog
+    lateinit var builder: AlertDialog.Builder
+    lateinit var dialgo: AlertDialog
 
     //newPost Alert Dialog
-    lateinit var newBuilder:AlertDialog.Builder
-    lateinit var newDialog:AlertDialog
+    lateinit var newBuilder: AlertDialog.Builder
+    lateinit var newDialog: AlertDialog
 
     //Initialize FireBaseAuth
     val mAuth = Firebase.auth
@@ -90,13 +79,6 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     var rv: Post_recycler? = null
     var Rv: users_rv? = null
 
-    companion object {
-        var userName: String? = null
-
-        var userPhoto: String? = null
-    }
-
-    var userPhotoInPost: String? = null
 
     var posts: ArrayList<UserPost> = ArrayList()
     var newList: ArrayList<UserInformation> = ArrayList()
@@ -117,6 +99,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
 
 
+
         bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())
@@ -128,17 +111,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         })
 
 
-        //put UserName And UserPhoto in the MainActivity
-        putUserNameAndUserphoto()
+
 
         //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
 
         model.getPost()
-        model.mutable.observe(this , Observer {
+        model.mutable.observe(this, Observer {
             posts.clear()
             posts.addAll(it)
-        } )
+        })
 
 //        Going to NewPostActivity
         FAB_newPost.setOnClickListener(View.OnClickListener {
@@ -159,19 +141,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             var intent = Intent(applicationContext, LogInActivity::class.java)
             startActivity(intent)
         } else {
-            userPhotoInPost = mAuth.currentUser!!.photoUrl.toString()
-            replaceFragment(HomeFragment())
+                replaceFragment(HomeFragment())
+
         }
     }
 
-
-    //get UserName and UserPhoto from Register Activity and update the UserInformation
-    fun putUserNameAndUserphoto() {
-        val intent = getIntent()
-        userName = intent.getStringExtra("userName")
-        userPhoto = intent.getStringExtra("userPhoto")
-
-    }
 
 
     fun replaceFragment(fragment: Fragment?) {
@@ -234,26 +208,34 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     }
 
     override fun changeUserName() {
-        val view:View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_chang_user_name , null , false)
-        val et_NewUserName:TextInputEditText = view.findViewById(R.id.ChangeUserName)
+        val view: View =
+            LayoutInflater.from(this).inflate(R.layout.custom_dialog_chang_user_name, null, false)
+        val et_NewUserName: TextInputEditText = view.findViewById(R.id.ChangeUserName)
         val btn_cancel: Button = view.findViewById(R.id.custom_dialog_Cancel)
         val btn_save: Button = view.findViewById(R.id.custom_dialog_changUserName_Save)
 
         et_NewUserName.setText(mAuth.currentUser!!.displayName)
         btn_save.setOnClickListener(OnClickListener {
-            if (!model.check_if_UserNameIs_exist(et_NewUserName.text.toString())) {
-                model.updateUserName(mAuth.currentUser!!.displayName.toString() , et_NewUserName.text.toString())
+            if (!model.check_if_UserNameIs_exist(et_NewUserName.getText().toString())) {
+
+                model.updateUserName(
+                    mAuth.currentUser!!.displayName.toString(),
+                    et_NewUserName.getText().toString()
+                )
 
                 var profile = userProfileChangeRequest {
-                    displayName = et_NewUserName.text.toString()
+                    displayName = et_NewUserName.getText().toString()
                 }
                 mAuth.currentUser!!.updateProfile(profile).addOnCompleteListener {
-                    if(it.isSuccessful){
+                    if (it.isSuccessful) {
                         dialgo.cancel()
                         replaceFragment(SettingFragment())
                     }
                 }
 
+            }
+            else{
+                Toast.makeText(applicationContext , "the user Name is already exists" , Toast.LENGTH_SHORT ).show()
             }
         })
 
@@ -262,14 +244,15 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         })
 
         builder = AlertDialog.Builder(this).setView(view)
-        dialgo  = builder.create()
+        dialgo = builder.create()
         dialgo.show()
 
     }
 
     override fun ChangeProfilePhoto() {
 
-        val view:View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_change_user_photo , null , false)
+        val view: View =
+            LayoutInflater.from(this).inflate(R.layout.custom_dialog_change_user_photo, null, false)
         iv_UserPhoto = view.findViewById(R.id.custom_newUserPhoto)
         val btn_cancel: Button = view.findViewById(R.id.custom_dialog_Cancel)
         val btn_save: Button = view.findViewById(R.id.custom_dialog_changUserName_Save)
@@ -280,13 +263,13 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
 
         btn_save.setOnClickListener(OnClickListener {
-            model.updateUserPhoto(mAuth.currentUser!!.displayName.toString() , ProfilePhoto!! )
+            model.updateUserPhoto(mAuth.currentUser!!.displayName.toString(), ProfilePhoto!!)
 
             var profile = userProfileChangeRequest {
                 photoUri = Uri.parse(ProfilePhoto)
             }
             mAuth.currentUser!!.updateProfile(profile).addOnCompleteListener {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     dialgo.cancel()
                     replaceFragment(SettingFragment())
                 }
@@ -298,10 +281,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         })
 
         builder = AlertDialog.Builder(this).setView(view)
-        dialgo  = builder.create()
+        dialgo = builder.create()
         dialgo.show()
     }
-
 
 
     //Pick Image From Gallery
@@ -367,18 +349,18 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
     override fun onCommentclick(position: Int) {
 
-        val intent = Intent(this , CommentActivity::class.java)
+        val intent = Intent(this, CommentActivity::class.java)
 
-        val userName   :String = posts.get(position).UserName
-        val userPhoto  :String = posts.get(position).UserPhoto
-        val postImage  :String = posts.get(position).postImage
-        val postComment:String = posts.get(position).postComment
+        val userName: String = posts.get(position).UserName
+        val userPhoto: String = posts.get(position).UserPhoto
+        val postImage: String = posts.get(position).postImage
+        val postComment: String = posts.get(position).postComment
 
-        intent.putExtra("UserName"    , userName)
-        intent.putExtra("UserPhoto"   , userPhoto)
-        intent.putExtra("postImage"   , postImage)
-        intent.putExtra("postComment" , postComment)
-        intent.putExtra("position" , position)
+        intent.putExtra("UserName", userName)
+        intent.putExtra("UserPhoto", userPhoto)
+        intent.putExtra("postImage", postImage)
+        intent.putExtra("postComment", postComment)
+        intent.putExtra("position", position)
 
         startActivity(intent)
     }

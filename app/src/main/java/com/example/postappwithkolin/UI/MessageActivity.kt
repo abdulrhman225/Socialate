@@ -26,6 +26,7 @@ class MessageActivity : AppCompatActivity() {
     lateinit var MessagesList :RecyclerView
     lateinit var et_writeMessage :EditText
     lateinit var SendMessage :CircleImageView
+    lateinit var fallback:ImageButton
 
     var UserNameAccepter :String ?= null
     var UserNameSender :String ?= null
@@ -50,6 +51,12 @@ class MessageActivity : AppCompatActivity() {
         MessagesList = findViewById(R.id.Message_List)
         et_writeMessage = findViewById(R.id.Message_message)
         SendMessage = findViewById(R.id.Message_send)
+        fallback = findViewById(R.id.Message_fallBack)
+
+        fallback.setOnClickListener(View.OnClickListener {
+            finish()
+        })
+
 
 
         //get UserName and UserPhoto and put here

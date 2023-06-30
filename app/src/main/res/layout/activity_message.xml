@@ -14,12 +14,20 @@
         android:background="@color/prime"
         android:padding="@dimen/_5sdp">
 
+        <ImageButton
+            android:id="@+id/Message_fallBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:src="@drawable/ic_baseline_keyboard_return_24"
+            android:backgroundTint="@color/prime"/>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/MessageUserPhoto"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_toRightOf="@id/Message_fallBack"
                 android:src="@drawable/user" />
 
             <TextView
@@ -51,31 +59,35 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         >
-    <EditText
-
-        android:id="@+id/Message_message"
-        android:layout_width="@dimen/_265sdp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:hint="Enter The Message Here"
-        android:textColorHint="@color/white"
-        android:background="@drawable/post_background"
-        android:textColor="@color/white"
-        android:layout_marginLeft="@dimen/_5sdp"
-        style="@style/editTextStyle"
-        android:padding="@dimen/_14sdp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/Message_send"
-            android:layout_width="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_alignParentRight="true"
+        <LinearLayout
+            android:id="@+id/comm_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:padding="@dimen/_5sdp"
-            android:layout_toRightOf="@+id/Message_message"
-            android:background="@drawable/post_background"
-            android:src="@drawable/ic_baseline_send_24" />
+            >
+
+            <EditText
+                android:id="@+id/Message_message"
+                style="@style/editTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/post_background"
+                android:hint="Enter The Message Here "
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/Message_send"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/post_background"
+                android:padding="@dimen/_10sdp"
+                android:src="@drawable/ic_baseline_send_24" />
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

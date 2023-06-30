@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingFragment#newInstance} factory method to
@@ -28,7 +30,7 @@ import com.squareup.picasso.Picasso;
  */
 public class SettingFragment extends Fragment {
     FragmentSettingBinding binding;
-    FirebaseAuth mAuth;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     onLogOutClickListener logOutClickListener;
     onChangeUserNameClickListener changeUserNameClickListener;
@@ -87,9 +89,7 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSettingBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        mAuth = FirebaseAuth.getInstance();
 
-        putProfileInfo();
 
         binding.profileUserName.setText(mAuth.getCurrentUser().getDisplayName());
         Picasso.get().load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.profilePhoto);
@@ -117,28 +117,9 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        binding.profileUserName.setText(mAuth.getCurrentUser().getDisplayName());
+        binding.profileUserName.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
         Picasso.get().load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.profilePhoto);
         return view;
-    }
-
-    //put UserName and Profile Photo
-    public void putProfileInfo() {
-        if (MainActivity.Companion.getUserName() != null && MainActivity.Companion.getUserPhoto() != null) {
-            FirebaseUser user = mAuth.getCurrentUser();
-            UserProfileChangeRequest updateProfile = new UserProfileChangeRequest.Builder().setDisplayName(MainActivity.Companion.getUserName())
-                    .setPhotoUri(Uri.parse(MainActivity.Companion.getUserPhoto())).build();
-
-            user.updateProfile(updateProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        binding.profileUserName.setText(user.getDisplayName());
-                        Picasso.get().load(user.getPhotoUrl()).into(binding.profilePhoto);
-                    }
-                }
-            });
-        }
     }
 
 

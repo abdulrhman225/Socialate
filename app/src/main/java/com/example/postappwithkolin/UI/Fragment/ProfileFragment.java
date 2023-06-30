@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class ProfileFragment extends Fragment {
 
     FragmentProfileBinding binding;
-    FirebaseAuth mAuth;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SAGDataFromDataBase model = new SAGDataFromDataBase();
     Post_recycler rv;
 
@@ -87,9 +87,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
-        mAuth = FirebaseAuth.getInstance();
 
-        putProfileInfo();
+
 
         binding.profileUserName.setText(mAuth.getCurrentUser().getDisplayName());
         Picasso.get().load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.profilePhoto);
@@ -120,22 +119,4 @@ public class ProfileFragment extends Fragment {
         return v;
     }
 
-    //put UserName and Profile Photo
-    public void putProfileInfo() {
-        if (MainActivity.Companion.getUserName() != null && MainActivity.Companion.getUserPhoto() != null) {
-            FirebaseUser user = mAuth.getCurrentUser();
-            UserProfileChangeRequest updateProfile = new UserProfileChangeRequest.Builder().setDisplayName(MainActivity.Companion.getUserName())
-                    .setPhotoUri(Uri.parse(MainActivity.Companion.getUserPhoto())).build();
-
-            user.updateProfile(updateProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        binding.profileUserName.setText(user.getDisplayName());
-                        Picasso.get().load(user.getPhotoUrl()).into(binding.profilePhoto);
-                    }
-                }
-            });
-        }
-    }
 }

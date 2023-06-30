@@ -93,13 +93,12 @@ public class CommentActivity extends AppCompatActivity {
             public void onChanged(ArrayList<CommentInfo> commentInfos) {
                 recycleComment rv = new recycleComment(commentInfos, new OnItemClickListener() {
                     @Override
-                    public void onItemClick(int position) {
-//                        CommentInfo inf = commentInfos.get(position);
-//                        Log.d(TAG, "onItemClick: abd" + inf.getCommentUserName());
-//                        Intent in = new Intent(CommentActivity.this ,profileActivity.class );
-//                        intent.putExtra("UserName", inf.getCommentUserName());
-//                        intent.putExtra("UserPhoto", inf.getCommentUserPhoto());
-//                        startActivity(in);
+                    public void onItemClick(int pos) {
+                        CommentInfo inf = commentInfos.get(pos);
+                        Intent in = new Intent(CommentActivity.this ,profileActivity.class );
+                        in.putExtra("UserName", inf.getCommentUserName());
+                        in.putExtra("UserPhoto", inf.getCommentUserPhoto());
+                        startActivity(in);
                     }
                 });
                 binding.profilePosts.setAdapter(rv);

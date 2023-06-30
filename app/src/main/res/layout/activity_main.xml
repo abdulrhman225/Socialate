@@ -21,7 +21,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/Main_bottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_50sdp"
             app:menu="@menu/navigation_menu"
             app:labelVisibilityMode="unlabeled"
             android:layout_alignParentBottom="true"
@@ -36,8 +36,8 @@
         android:src="@drawable/ic_baseline_add_24"
         android:id="@+id/main_FLB"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/_130sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_137sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
         />
 
 

@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
-    FirebaseAuth mAuth;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     SAGDataFromDataBase model = new  SAGDataFromDataBase();
     public static ArrayList<UserPost>posts = new ArrayList<>();
@@ -94,16 +94,12 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
-
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        binding.mainUserName.setText(user.getDisplayName());
-        Picasso.get().load(user.getPhotoUrl()).into(binding.mainIVUserImage);
+        binding.mainUserName.setText(mAuth.getCurrentUser().getDisplayName());
+        Picasso.get().load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.mainIVUserImage);
 
-        putProfileInfo();
 
         model = new ViewModelProvider(HomeFragment.this).get(SAGDataFromDataBase.class);
         updateData();
@@ -112,24 +108,7 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-    //put UserName and Profile Photo
-    public void putProfileInfo() {
-        if (MainActivity.Companion.getUserName() != null && MainActivity.Companion.getUserPhoto() != null) {
-            FirebaseUser user = mAuth.getCurrentUser();
-            UserProfileChangeRequest updateProfile = new UserProfileChangeRequest.Builder().setDisplayName(MainActivity.Companion.getUserName())
-                    .setPhotoUri(Uri.parse(MainActivity.Companion.getUserPhoto())).build();
 
-            user.updateProfile(updateProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        binding.mainUserName.setText(user.getDisplayName());
-                        Picasso.get().load(user.getPhotoUrl()).into(binding.mainIVUserImage);
-                    }
-                }
-            });
-        }
-    }
 
 
     public void  updateData(){

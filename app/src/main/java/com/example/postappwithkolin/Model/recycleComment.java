@@ -1,5 +1,6 @@
 package com.example.postappwithkolin.Model;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public class recycleComment extends RecyclerView.Adapter<recycleComment.holder> 
 
     ArrayList<CommentInfo> infos;
     OnItemClickListener listener;
+
+    private static final String TAG = "recycleComment";
 
     public recycleComment(ArrayList<CommentInfo> infos , OnItemClickListener listener  ){
         this.infos = infos;
@@ -59,7 +62,7 @@ public class recycleComment extends RecyclerView.Adapter<recycleComment.holder> 
             tv_userName = itemView.findViewById(R.id.comment_CommentUserName);
             tv_Comment = itemView.findViewById(R.id.Comment_comment);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            tv_userName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position =Integer.parseInt(tv_userName.getTag().toString());
