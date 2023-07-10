@@ -6,26 +6,15 @@
     android:id="@+id/Message"
     android:orientation="vertical">
 
-<!--    <TextView-->
-<!--        android:id="@+id/UserName_Sender"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="TextView"-->
-<!--        android:layout_marginBottom="@dimen/_5sdp"-->
-<!--        android:paddingLeft="@dimen/_10sdp"-->
-<!--        android:paddingRight="@dimen/_10sdp"-->
-<!--        android:background="#F0FD71"-->
-<!--        />-->
-
     <TextView
         android:id="@+id/UserName_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="textView"
+        android:textColor="@color/white"
         android:paddingLeft="@dimen/_10sdp"
         android:paddingRight="@dimen/_10sdp"
-        android:textSize="@dimen/_18sdp"
-        android:background="#F0FD71"
-        />
+        android:textSize="@dimen/_15sdp"
+        android:background="@drawable/post_background"/>
 
 </LinearLayout>
