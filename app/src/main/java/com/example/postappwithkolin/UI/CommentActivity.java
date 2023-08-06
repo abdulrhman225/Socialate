@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import com.example.postappwithkolin.Model.recycleComment;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -69,6 +70,10 @@ public class CommentActivity extends AppCompatActivity {
         Picasso.get().load(Uri.parse(postImage)).into(binding.customPostImage);
         binding.customUserName.setText(userName);
         binding.customPostComment.setText(postComment);
+        Log.d(TAG, "onCreate: "+postImage);
+
+        if(postImage.equals("null"))
+            binding.customPostImage.setVisibility(View.GONE);
 
 
         binding.commentSubmit.setOnClickListener(new View.OnClickListener() {

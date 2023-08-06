@@ -77,6 +77,8 @@ class MessageActivity : AppCompatActivity() {
                 var userMasses: UserMessages =
                     UserMessages(UserNameSender!!, UserNameAccepter!!, message)
                     messagesSource.uploadMessage(userMasses)
+                et_writeMessage.setText("")
+
 
             }
 

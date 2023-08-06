@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.Model.Post_recycler
+import com.example.postappwithkolin.Model.UserPost
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
 import com.example.postappwithkolin.UI.Fragment.ProfileFragment
@@ -41,6 +42,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
     var userPhoto:String?=null
 
     var model:SAGDataFromDataBase = SAGDataFromDataBase()
+    var posts:ArrayList<UserPost> = ArrayList()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +86,9 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
             rv_posts.adapter = rv
             rv_posts.layoutManager = LinearLayoutManager(this)
             rv_posts.setHasFixedSize(true)
+
+            posts.clear()
+            posts.addAll(it)
         })
 
 
@@ -101,6 +106,20 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
     }
 
     override fun onCommentClick(position: Int) {
+        val intent = Intent(this, CommentActivity::class.java)
+
+        val userName: String = posts.get(position).UserName
+        val userPhoto: String = posts.get(position).UserPhoto
+        val postImage: String = posts.get(position).postImage
+        val postComment: String = posts.get(position).postComment
+
+        intent.putExtra("UserName", userName)
+        intent.putExtra("UserPhoto", userPhoto)
+        intent.putExtra("postImage", postImage)
+        intent.putExtra("postComment", postComment)
+        intent.putExtra("position", position)
+
+        startActivity(intent)
     }
 
 

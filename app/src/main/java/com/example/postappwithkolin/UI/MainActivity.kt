@@ -1,7 +1,12 @@
 package com.example.postappwithkolin.UI
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.content.Context
 import android.content.Intent
+import android.net.Network
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -26,18 +31,22 @@ import com.example.postappwithkolin.UI.Fragment.HomeFragment
 import com.example.postappwithkolin.UI.Fragment.ProfileFragment
 import com.example.postappwithkolin.UI.Fragment.SearchFragment
 import com.example.postappwithkolin.UI.Fragment.SettingFragment
+import com.example.postappwithkolin.Room.Post.*
+import com.example.postappwithkolin.Room.Post.resultPosts
+import com.example.postappwithkolin.Room.Users.resultUsers
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import kotlin.properties.Delegates
+import android.net.ConnectivityManager as ConnectivityManager1
 
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
@@ -45,6 +54,8 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     SearchFragment.onCompleteListener1, SettingFragment.onLogOutClickListener,
     SettingFragment.onChangeUserNameClickListener,
     SettingFragment.onChangeProfilePhotoClickListener, HomeFragment.onCommentClick {
+
+    val TAG = "MainActivity"
 
     lateinit var FAB_newPost: FloatingActionButton
 
@@ -84,18 +95,36 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
     var newList: ArrayList<UserInformation> = ArrayList()
 
 
+    companion object {
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var userResult: resultUsers
+        lateinit var database:postDataBase
+
+        var isConnected:Boolean = true
+    }
+
     //Initialize SAGDataFromFireBase
     var model: SAGDataFromDataBase = SAGDataFromDataBase()
-
+    var result :resultPosts = resultPosts(this);
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        database= postDataBase.getInstance(this)
+
+        val manager:ConnectivityManager =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val info: NetworkInfo? = manager.activeNetworkInfo;
+        isConnected = info !=null && info.isConnectedOrConnecting
 
         //Initialize Views
         bottomNavigation = findViewById(R.id.Main_bottomNavigation)
         Frame = findViewById(R.id.Main_frame)
         FAB_newPost = findViewById(R.id.main_FLB)
 
+        userResult = resultUsers(this)
 
 
 
@@ -110,17 +139,22 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             true
         })
 
-
-
-
         //observer to updated data
         model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
-
+        //get the data from the data source
         model.getPost()
         model.mutable.observe(this, Observer {
-            posts.clear()
-            posts.addAll(it)
+
+            result.Insert(it)
+
+            if(!it.isEmpty()) {
+                posts.clear()
+                posts.addAll(it)
+            }
+
+
         })
+
 
 //        Going to NewPostActivity
         FAB_newPost.setOnClickListener(View.OnClickListener {
@@ -141,11 +175,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             var intent = Intent(applicationContext, LogInActivity::class.java)
             startActivity(intent)
         } else {
-                replaceFragment(HomeFragment())
+            replaceFragment(HomeFragment())
 
         }
     }
-
 
 
     fun replaceFragment(fragment: Fragment?) {
@@ -233,9 +266,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
                     }
                 }
 
-            }
-            else{
-                Toast.makeText(applicationContext , "the user Name is already exists" , Toast.LENGTH_SHORT ).show()
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "the user Name is already exists",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
@@ -363,6 +399,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         intent.putExtra("position", position)
 
         startActivity(intent)
+    }
+
+
+    fun checkIfConnectingToInternet(): Boolean {
+        val cm: ConnectivityManager1 =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager1
+        val nf: NetworkInfo = cm.activeNetworkInfo!!
+        if (nf == null)
+            return false
+        return nf.isConnected
     }
 
 
