@@ -12,11 +12,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_5"
         android:label="@string/app_name"
+
         android:roundIcon="@mipmap/ic_launcher_5_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PostAppWithKolin">
         <activity
             android:name=".UI.Splash_Screen"
+            android:screenOrientation="portrait"
             android:exported="true">
 
             <intent-filter>
@@ -31,6 +33,7 @@
         </activity>
         <activity
             android:name=".UI.CommentActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -55,23 +58,29 @@
 
         <activity
             android:name=".UI.MessageActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".UI.profileActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".UI.RegisterActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".UI.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
         <activity
             android:name=".UI.NewPostActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".UI.LogInActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
     </application>
 

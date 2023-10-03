@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "post_table")
 public class postTable {
+
     @PrimaryKey(autoGenerate = true)
     int postId;
     String userImage;
@@ -36,7 +37,7 @@ public class postTable {
         return postName;
     }
 
-    public postTable(String userImage, String postImage, String userName, String postName) {
+    public postTable(String userImage, String postImage, String userName, String postName ) {
         this.userImage = userImage;
         this.postImage = postImage;
         this.userName = userName;

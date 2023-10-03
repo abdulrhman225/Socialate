@@ -18,11 +18,18 @@ import android.view.ViewGroup;
 import com.example.postappwithkolin.Model.UserInformation;
 import com.example.postappwithkolin.Model.users_rv;
 import com.example.postappwithkolin.R;
+import com.example.postappwithkolin.Room.Users.UserTable;
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase;
+import com.example.postappwithkolin.UI.MainActivity;
 import com.example.postappwithkolin.databinding.FragmentSearchBinding;
 import com.google.firebase.auth.UserInfo;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +44,7 @@ public class SearchFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ArrayList<UserInformation> users = new ArrayList<>();
 
 
     // TODO: Rename and change types of parameters
@@ -95,25 +103,6 @@ public class SearchFragment extends Fragment {
 
         recyclerView = binding.searchRv;
 
-        model = new ViewModelProvider(this).get(SAGDataFromDataBase.class);
-        model.getAllUsers();
-        model.get_mutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<UserInformation>>() {
-            @Override
-            public void onChanged(ArrayList<UserInformation> userInformations) {
-                informations = userInformations;
-                rv = new users_rv(userInformations, new users_rv.OnCompleteListener() {
-                    @Override
-                    public void onComplete(int position) {
-                        onCompleteListener.onComplete(position , informations);
-                    }
-                });
-                binding.searchRv.setAdapter(rv);
-                binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
-                binding.searchRv.setHasFixedSize(true);
-            }
-        });
-
-
 
         binding.SearchFragmentSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -123,20 +112,86 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                onChangeListener.onChange(newText , informations);
+                if (MainActivity.Companion.isConnected())
+                    onChangeListener.onChange(newText, informations);
                 return true;
             }
         });
 
+        model = new ViewModelProvider(this).get(SAGDataFromDataBase.class);
+        updateData();
 
         return v;
     }
 
-    public interface onChangeListener1{
-        void onChange(String newText , ArrayList<UserInformation> informations);
+
+    public void updateData() {
+        if (MainActivity.Companion.isConnected()) {
+            model.getAllUsers();
+            model.get_mutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<UserInformation>>() {
+                @Override
+                public void onChanged(ArrayList<UserInformation> userInformations) {
+                    informations = userInformations;
+                    rv = new users_rv(userInformations, new users_rv.OnCompleteListener() {
+                        @Override
+                        public void onComplete(int position) {
+                            onCompleteListener.onComplete(position, informations);
+                        }
+                    });
+                    binding.searchRv.setAdapter(rv);
+                    binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
+                    binding.searchRv.setHasFixedSize(true);
+                }
+            });
+        } else {
+
+            MainActivity.Companion.getDb().userDao().getAllUsers().subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new io.reactivex.rxjava3.core.Observer<List<UserTable>>() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<UserTable> userTables) {
+
+                            for (UserTable user : userTables) {
+                                users.add(new UserInformation(user.getUserName(), user.getEmail(), user.getUserPhoto()));
+                            }
+
+                            informations = users;
+                            rv = new users_rv(users, new users_rv.OnCompleteListener() {
+                                @Override
+                                public void onComplete(int position) {
+                                }
+                            });
+                            binding.searchRv.setAdapter(rv);
+                            binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
+                            binding.searchRv.setHasFixedSize(true);
+
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+
+        }
+
     }
 
-    public interface onCompleteListener1{
-        void onComplete(int position  ,ArrayList<UserInformation> informations);
+
+    public interface onChangeListener1 {
+        void onChange(String newText, ArrayList<UserInformation> informations);
+    }
+
+    public interface onCompleteListener1 {
+        void onComplete(int position, ArrayList<UserInformation> informations);
     }
 }

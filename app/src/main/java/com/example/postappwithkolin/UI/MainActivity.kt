@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.content.Context
 import android.content.Intent
-import android.net.Network
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -32,7 +31,7 @@ import com.example.postappwithkolin.UI.Fragment.ProfileFragment
 import com.example.postappwithkolin.UI.Fragment.SearchFragment
 import com.example.postappwithkolin.UI.Fragment.SettingFragment
 import com.example.postappwithkolin.Room.Post.*
-import com.example.postappwithkolin.Room.Post.resultPosts
+import com.example.postappwithkolin.Room.Users.UsersDataBase
 import com.example.postappwithkolin.Room.Users.resultUsers
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -45,8 +44,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
-import kotlin.properties.Delegates
-import android.net.ConnectivityManager as ConnectivityManager1
 
 
 class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
@@ -99,35 +96,22 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
 
         @SuppressLint("StaticFieldLeak")
         lateinit var userResult: resultUsers
+        @SuppressLint("StaticFieldLeak")
         lateinit var database:postDataBase
+        lateinit var db:UsersDataBase
 
         var isConnected:Boolean = true
     }
 
     //Initialize SAGDataFromFireBase
     var model: SAGDataFromDataBase = SAGDataFromDataBase()
-    var result :resultPosts = resultPosts(this);
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        database= postDataBase.getInstance(this)
-
-        val manager:ConnectivityManager =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val info: NetworkInfo? = manager.activeNetworkInfo;
-        isConnected = info !=null && info.isConnectedOrConnecting
-
         //Initialize Views
         bottomNavigation = findViewById(R.id.Main_bottomNavigation)
         Frame = findViewById(R.id.Main_frame)
         FAB_newPost = findViewById(R.id.main_FLB)
-
-        userResult = resultUsers(this)
-
-
-
 
         bottomNavigation.setOnItemSelectedListener(NavigationBarView.OnItemSelectedListener {
             when (it.itemId) {
@@ -139,29 +123,26 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
             true
         })
 
-        //observer to updated data
-        model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
-        //get the data from the data source
-        model.getPost()
-        model.mutable.observe(this, Observer {
 
-            result.Insert(it)
+        database= postDataBase.getInstance(this)
+        db = UsersDataBase.getInstance(this)
+        userResult = resultUsers(this)
 
-            if(!it.isEmpty()) {
-                posts.clear()
-                posts.addAll(it)
-            }
+        getPostDataFromFireBaseAndPutItIntoRoom()
+        getUserDataFromFireBaseAndPutItIntoRoom()
+        checkIfIAmConnectingToNetwork()
 
 
-        })
 
 
 //        Going to NewPostActivity
         FAB_newPost.setOnClickListener(View.OnClickListener {
-            val intent = Intent(applicationContext, NewPostActivity::class.java)
-            intent.putExtra("userName", mAuth.currentUser!!.displayName)
-            intent.putExtra("userPhoto", mAuth.currentUser!!.photoUrl)
-            startActivity(intent)
+            if(isConnected) {
+                val intent = Intent(applicationContext, NewPostActivity::class.java)
+                intent.putExtra("userName", mAuth.currentUser!!.displayName)
+                intent.putExtra("userPhoto", mAuth.currentUser!!.photoUrl)
+                startActivity(intent)
+            }
         })
 
 
@@ -401,14 +382,43 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         startActivity(intent)
     }
 
+    fun getPostDataFromFireBaseAndPutItIntoRoom(){
+        //observer to updated data
+        model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
+        //get the data from the data source
+        model.getPost()
+        model.mutable.observe(this, Observer {
 
-    fun checkIfConnectingToInternet(): Boolean {
-        val cm: ConnectivityManager1 =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager1
-        val nf: NetworkInfo = cm.activeNetworkInfo!!
-        if (nf == null)
-            return false
-        return nf.isConnected
+            if(!it.isEmpty()) {
+                posts.clear()
+                posts.addAll(it)
+            }
+
+
+        })
+    }
+
+    fun getUserDataFromFireBaseAndPutItIntoRoom(){
+        //observer to updated data
+        model = ViewModelProvider(this).get(SAGDataFromDataBase::class.java)
+        //get the data from the data source
+        model.getAllUsers()
+        model._mutable.observe(this, Observer {
+            userResult.InsertIntoUserRoom(it)
+
+        })
+
+
+
+
+    }
+
+    fun checkIfIAmConnectingToNetwork(){
+        val manager:ConnectivityManager =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val info: NetworkInfo? = manager.activeNetworkInfo;
+        isConnected = info !=null && info.isConnectedOrConnecting
     }
 
 

@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {postTable.class} , version = 1)
+@Database(entities = {postTable.class} , version = 8)
 public abstract class postDataBase extends RoomDatabase {
     public abstract PostDao postDao();
     private static postDataBase Instance;

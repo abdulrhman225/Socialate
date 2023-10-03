@@ -99,21 +99,24 @@ public class SettingFragment extends Fragment {
         binding.fragmentSettingLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logOutClickListener.onLogOut();
+                if (MainActivity.Companion.isConnected())
+                    logOutClickListener.onLogOut();
             }
         });
 
         binding.fragmentSettingChangeUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeUserNameClickListener.changeUserName();
+                if (MainActivity.Companion.isConnected())
+                    changeUserNameClickListener.changeUserName();
             }
         });
 
         binding.fragmentSettingChangeProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeProfilePhotoClickListener.ChangeProfilePhoto();
+                if (MainActivity.Companion.isConnected())
+                    changeProfilePhotoClickListener.ChangeProfilePhoto();
             }
         });
 

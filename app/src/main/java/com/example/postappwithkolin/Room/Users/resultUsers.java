@@ -70,7 +70,7 @@ public class resultUsers {
             }
         }
 
-        public void getAllUsers() {
+        public void InsertIntoUserRoom(List<UserInformation> allUsers) {
             UsersDataBase userDB = UsersDataBase.getInstance(context);
             userDB.userDao().getAllUsers().subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -82,15 +82,11 @@ public class resultUsers {
 
                         @Override
                         public void onNext(@NonNull List<UserTable> userTables) {
-                            if (!userTables.isEmpty()) {
-                                ArrayList<UserInformation> users = new ArrayList();
 
-                                for (UserTable user : userTables) {
-                                    users.add(new UserInformation(user.getUserName() , user.getEmail() , user.getUserPhoto()));
-                                }
-                                AllUsers.clear();
-                                AllUsers.addAll(users);
-                            }
+                            if (!userTables.isEmpty())
+                                delete();
+                            Insert(allUsers);
+
                         }
 
                         @Override
