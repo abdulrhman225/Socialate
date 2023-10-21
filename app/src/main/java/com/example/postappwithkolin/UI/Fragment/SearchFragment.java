@@ -44,7 +44,6 @@ public class SearchFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ArrayList<UserInformation> users = new ArrayList<>();
 
 
     // TODO: Rename and change types of parameters
@@ -126,64 +125,90 @@ public class SearchFragment extends Fragment {
 
 
     public void updateData() {
-        if (MainActivity.Companion.isConnected()) {
-            model.getAllUsers();
-            model.get_mutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<UserInformation>>() {
-                @Override
-                public void onChanged(ArrayList<UserInformation> userInformations) {
-                    informations = userInformations;
-                    rv = new users_rv(userInformations, new users_rv.OnCompleteListener() {
-                        @Override
-                        public void onComplete(int position) {
-                            onCompleteListener.onComplete(position, informations);
-                        }
-                    });
-                    binding.searchRv.setAdapter(rv);
-                    binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
-                    binding.searchRv.setHasFixedSize(true);
-                }
-            });
+        boolean isTheDeviceConnectedToInternet = MainActivity.Companion.isConnected();
+
+        if (isTheDeviceConnectedToInternet) {
+            getTheLiveUsersData();
+
         } else {
+            getTheDataFromLocalRoom();
 
-            MainActivity.Companion.getDb().userDao().getAllUsers().subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new io.reactivex.rxjava3.core.Observer<List<UserTable>>() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<UserTable> userTables) {
-
-                            for (UserTable user : userTables) {
-                                users.add(new UserInformation(user.getUserName(), user.getEmail(), user.getUserPhoto()));
-                            }
-
-                            informations = users;
-                            rv = new users_rv(users, new users_rv.OnCompleteListener() {
-                                @Override
-                                public void onComplete(int position) {
-                                }
-                            });
-                            binding.searchRv.setAdapter(rv);
-                            binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
-                            binding.searchRv.setHasFixedSize(true);
-
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
 
         }
 
+    }
+
+    public void getTheLiveUsersData (){
+        model.getAllUsers();
+        model.get_mutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<UserInformation>>() {
+            @Override
+            public void onChanged(ArrayList<UserInformation> userInformations) {
+                putDataInRecyclerview(userInformations);
+            }
+        });
+    }
+
+    public void putDataInRecyclerview(ArrayList<UserInformation> userInformations){
+        informations = userInformations;
+        rv = new users_rv(userInformations, new users_rv.OnCompleteListener() {
+            @Override
+            public void onComplete(int position) {
+                onCompleteListener.onComplete(position, informations);
+            }
+        });
+        binding.searchRv.setAdapter(rv);
+        binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.searchRv.setHasFixedSize(true);
+    }
+
+    public void getTheDataFromLocalRoom(){
+        MainActivity.Companion.getDb().userDao().getAllUsers().subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new io.reactivex.rxjava3.core.Observer<List<UserTable>>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull List<UserTable> userTables) {
+
+                        List<UserInformation> users = convertToUserTable(userTables);
+
+
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    public List<UserInformation> convertToUserTable(List<UserTable> userTables){
+        List<UserInformation> users = new ArrayList<>();
+        for (UserTable user : userTables) {
+            users.add(new UserInformation(user.getUserName(), user.getEmail(), user.getUserPhoto()));
+        }
+        return users;
+    }
+
+    public void putLocalDataIntoRecyclerView(ArrayList<UserInformation> users){
+        informations = users;
+        rv = new users_rv(users, new users_rv.OnCompleteListener() {
+            @Override
+            public void onComplete(int position) {
+            }
+        });
+        binding.searchRv.setAdapter(rv);
+        binding.searchRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.searchRv.setHasFixedSize(true);
     }
 
 

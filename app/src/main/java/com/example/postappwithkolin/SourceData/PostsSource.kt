@@ -33,6 +33,8 @@ class SAGDataFromDataBase : ViewModel() {
     val _mutable: MutableLiveData<ArrayList<UserInformation>> = MutableLiveData()
     val _mutables: MutableLiveData<ArrayList<CommentInfo>> = MutableLiveData()
 
+
+
     val db = Firebase.database
     val mRef = db.reference
 
@@ -307,7 +309,7 @@ class SAGDataFromDataBase : ViewModel() {
             override fun onDataChange(@NonNull snapshot: DataSnapshot) {
                 posts.clear()
                 viewModelScope.launch(Dispatchers.IO) {
-                    var it: List<DataSnapshot> = snapshot.children.toList()
+                    val it: List<DataSnapshot> = snapshot.children.toList()
 
                     for (n in it.size-1 downTo 0) {
                         userName_Post =

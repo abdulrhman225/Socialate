@@ -44,7 +44,7 @@ public class resultUsers {
 
         public void Insert(List<UserInformation> Users) {
             UsersDataBase userDB = UsersDataBase.getInstance(context);
-            ArrayList<UserTable> users = new ArrayList();
+            ArrayList<UserTable> users = new ArrayList<>();
 
             for (UserInformation user : Users) {
                 users.add(new UserTable(user.getUserName() , user.getEmail() ,user.getUserPhoto()));
@@ -82,9 +82,7 @@ public class resultUsers {
 
                         @Override
                         public void onNext(@NonNull List<UserTable> userTables) {
-
-                            if (!userTables.isEmpty())
-                                delete();
+                            delete();
                             Insert(allUsers);
 
                         }

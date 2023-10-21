@@ -268,8 +268,13 @@ public class HomeFragment extends Fragment {
 
                         @Override
                         public void onNext(@NonNull List<postTable> postTables) {
-                            Delete();
-                            Insert(userPosts);
+                            if(userPosts.size() > postTables.size()) {
+                                Delete();
+                                Insert(userPosts);
+                            }
+
+
+
                         }
 
                         @Override
