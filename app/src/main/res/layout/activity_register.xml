@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="User Name"
-        android:padding="@dimen/_10sdp"
+        android:padding="@dimen/_3sdp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/Register_UserName"
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:padding="@dimen/_10sdp"
+        android:padding="@dimen/_3sdp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/Register_Email"
@@ -88,10 +88,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:padding="@dimen/_10sdp"
+        android:padding="@dimen/_3sdp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/Register_Password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/LoginStyel"
+            android:inputType="textPassword"
+            android:padding="@dimen/_15sdp"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:padding="@dimen/_3sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Register_ConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/LoginStyel"

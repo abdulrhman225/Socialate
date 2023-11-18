@@ -43,6 +43,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -50,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var et_UserName: TextInputEditText
     lateinit var et_Email: TextInputEditText
     lateinit var et_Password: TextInputEditText
+    lateinit var et_ConfirmPassword: TextInputEditText
     lateinit var btn_Register: Button
     lateinit var btn_fallback: ImageButton
     val REQ_CODE = 1
@@ -88,6 +91,7 @@ class RegisterActivity : AppCompatActivity() {
         et_UserName = findViewById(R.id.Register_UserName)
         et_Email = findViewById(R.id.Register_Email)
         et_Password = findViewById(R.id.Register_Password)
+        et_ConfirmPassword = findViewById(R.id.Register_ConfirmPassword)
         btn_Register = findViewById(R.id.Register_register)
         iv_UserImage = findViewById(R.id.Register_UserPhoto)
         btn_fallback = findViewById(R.id.Register_fallBack)
@@ -208,15 +212,27 @@ class RegisterActivity : AppCompatActivity() {
     fun makeNewAccount() {
         val email = et_Email.text.toString()
         val password = et_Password.text.toString()
+        val confirmPassword = et_ConfirmPassword.text.toString()
         val UserName = et_UserName.text.toString()
         val uri: String = userPhoto.toString()
         var Token:String ?= null
 
+        val emailRegex = "^(.+)@(.+)\$"
+        val pattern:Pattern = Pattern.compile(emailRegex)
+        val matcher: Matcher = pattern.matcher(email)
 
-        //send Token and UserName
-        var dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
-        var dia :AlertDialog = dialog.create()
-        dia.show()
+
+        val passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$"
+        val pat:Pattern = Pattern.compile(passwordRegex)
+        val mat: Matcher = pattern.matcher(password)
+
+
+        val CheckingIfUserNameIsUnique = !model.check_if_UserNameIs_exist(UserName)
+        val CheckIfPersonalFiledIsNotEmpty = email != "" && password != "" && UserName != "" && uri !="";
+
+
+
+        var dia = waitingAlertDialog()
         FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener {
                 if (it.isSuccessful) {
@@ -225,41 +241,92 @@ class RegisterActivity : AppCompatActivity() {
                 }
             })
 
-        if (email != "" && password != "" && UserName != "" && uri != ""  ) {
+        if (CheckIfPersonalFiledIsNotEmpty) {
+            if(confirmPassword != password) {
+                if (CheckingIfUserNameIsUnique) {
+                    if (matcher.matches()) {
+                        if (mat.matches()) {
+                            mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(
+                                    OnCompleteListener {
+                                        if (it.isSuccessful) {
 
-            //check if the UserName is Already exists
-            if (!model.check_if_UserNameIs_exist(UserName)) {
+                                            updateUserProfile()
+                                            model.uploadUserInfo(
+                                                UserInformation(
+                                                    UserName,
+                                                    email,
+                                                    uri
+                                                )
+                                            )
+                                            model.uploadUserAndToken(UserName, Token.toString())
+                                        }
 
-                // Make New UserAccount
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
-                    OnCompleteListener {
-                        if (it.isSuccessful) {
-                            //set UserName and UserPhoto to MainActivity
-                            val user = mAuth.currentUser
-                            val updateProfile = UserProfileChangeRequest.Builder().setDisplayName(
-                                UserName
-                            )
-                                .setPhotoUri(Uri.parse(userPhoto)).build()
-
-                            user!!.updateProfile(updateProfile).addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    startActivity(intent)
-                                }
-                            }
-
-                            //send UserInformation to Firebase
-                            model.uploadUserInfo(UserInformation(UserName, email, uri))
-
-
-
-                            model.uploadUserAndToken(UserName ,Token.toString() )
+                                    })
+                        } else {
+                            et_Password.error =
+                                "your password should contain at least 8 digits ,one simple ,one Capital letter and one Small letter "
                         }
-
-                    })
+                    } else {
+                        et_Email.error = "Please Enter Correct Email"
+                    }
+                } else {
+                    et_UserName.error = "This User Name is already Taken"
+                }
+            }else{
+                et_ConfirmPassword.error = "the Password and Confirm Password does not match"
             }
-            else{
-                Toast.makeText(applicationContext , "UserName is Already Exists " , Toast.LENGTH_SHORT).show()
+        }else{
+            checkingIsThereAnyFieldEmpty()
+        }
+
+    }
+
+    private fun waitingAlertDialog() :AlertDialog{
+        var dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+        var dia :AlertDialog = dialog.create()
+        dia.show()
+
+        return dia;
+    }
+
+    private fun checkingIsThereAnyFieldEmpty(){
+        val email = et_Email.text.toString()
+        val password = et_Password.text.toString()
+        val UserName = et_UserName.text.toString()
+        val uri: String = userPhoto.toString()
+
+        if(email == ""){
+            et_Email.error = "Please Fill This Field"
+        }
+
+        if(password == ""){
+            et_Password.error = "Please Fill This Field"
+        }
+
+        if(UserName == ""){
+            et_UserName.error = "Please Fill This Field"
+        }
+
+        if(uri == ""){
+            Toast.makeText(applicationContext , "Please Choose Photo" , Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUserProfile(){
+        val UserName = et_UserName.text.toString()
+
+        val user = mAuth.currentUser
+        val updateProfile =
+            UserProfileChangeRequest.Builder().setDisplayName(
+                UserName
+            )
+                .setPhotoUri(Uri.parse(userPhoto)).build()
+
+        user!!.updateProfile(updateProfile).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         }
 
