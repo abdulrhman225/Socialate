@@ -242,7 +242,7 @@ class RegisterActivity : AppCompatActivity() {
             })
 
         if (CheckIfPersonalFiledIsNotEmpty) {
-            if(confirmPassword != password) {
+            if(confirmPassword == password) {
                 if (CheckingIfUserNameIsUnique) {
                     if (matcher.matches()) {
                         if (mat.matches()) {
@@ -331,9 +331,4 @@ class RegisterActivity : AppCompatActivity() {
         }
 
     }
-
-
-
-
-
 }

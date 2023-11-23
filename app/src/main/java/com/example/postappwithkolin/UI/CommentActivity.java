@@ -28,7 +28,7 @@ import java.util.Objects;
 public class CommentActivity extends AppCompatActivity {
 
     ActivityCommentBinding binding;
-    String userName, userPhoto , postImage, postComment , CommentText;
+    String userName, userPhoto , postImage, postComment , CommentText , postVideo;
     int position ;
     SAGDataFromDataBase model = new SAGDataFromDataBase();
 
@@ -62,6 +62,7 @@ public class CommentActivity extends AppCompatActivity {
         userName    = intent.getStringExtra("UserName");
         userPhoto   = intent.getStringExtra("UserPhoto");
         postImage   = intent.getStringExtra("postImage");
+        postVideo   = intent.getStringExtra("postVideo");
         postComment = intent.getStringExtra("postComment");
         position = intent.getIntExtra("position" , 0);
 
@@ -70,10 +71,15 @@ public class CommentActivity extends AppCompatActivity {
         Picasso.get().load(Uri.parse(postImage)).into(binding.customPostImage);
         binding.customUserName.setText(userName);
         binding.customPostComment.setText(postComment);
-        Log.d(TAG, "onCreate: "+postImage);
+        binding.commentVideo.setVideoURI(Uri.parse(postVideo));
+        binding.commentVideo.start();
+        Log.d(TAG, "onCreate: "+postVideo);
 
         if(postImage.equals("null"))
             binding.customPostImage.setVisibility(View.GONE);
+
+        if (postVideo.equals("null"))
+            binding.frameLayoutVv.setVisibility(View.GONE);
 
 
         binding.commentSubmit.setOnClickListener(new View.OnClickListener() {

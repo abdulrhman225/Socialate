@@ -1,17 +1,23 @@
 package com.example.postappwithkolin.Model
 
+import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.MediaController
 import android.widget.TextView
+import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postappwithkolin.R
 import com.squareup.picasso.Picasso
 
 class Post_recycler(private val list: ArrayList<UserPost>, private val listener: OnItemClickListener ,
-private val listener1 : onCommentButtonClick) :
+private val listener1 : onCommentButtonClick
+) :
     RecyclerView.Adapter<Post_recycler.viewHolder>() {
 
 
@@ -24,6 +30,8 @@ private val listener1 : onCommentButtonClick) :
         var postImage: ImageView
         var UserPhoto: ImageView
         var Comment_post: Button
+        var PostVideo :VideoView
+        var fl_forVideo :FrameLayout
 
         init {
             tv_userName = itemView.findViewById(R.id.custom_UserName)
@@ -31,6 +39,8 @@ private val listener1 : onCommentButtonClick) :
             postImage = itemView.findViewById(R.id.custom_PostImage)
             UserPhoto = itemView.findViewById(R.id.custom_UserPhoto)
             Comment_post = itemView.findViewById(R.id.custom_Comment)
+            PostVideo = itemView.findViewById(R.id.custom_postVideo)
+            fl_forVideo = itemView.findViewById(R.id.custom_fl_forVideo)
 
             tv_userName.setOnClickListener(this)
             Comment_post.setOnClickListener(this)
@@ -68,6 +78,16 @@ private val listener1 : onCommentButtonClick) :
         if (!userPost.postImage.equals("null")) {
             holder.postImage.visibility = View.VISIBLE
             Picasso.get().load(userPost.postImage).into(holder.postImage)
+        }
+        if (!userPost.postVideo.equals("null")) {
+            holder.fl_forVideo.visibility = View.VISIBLE
+            holder.PostVideo.setVideoURI(Uri.parse(userPost.postVideo))
+            holder.PostVideo.start()
+
+            val mc = MediaController(holder.fl_forVideo.context)
+            holder.PostVideo.setMediaController(mc)
+            mc.setAnchorView(holder.PostVideo)
+
         }
 
 

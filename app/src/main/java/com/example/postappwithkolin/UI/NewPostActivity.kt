@@ -13,9 +13,12 @@ import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.MediaController
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.VideoView
 import com.example.postappwithkolin.Model.UserPost
 import com.example.postappwithkolin.R
 import com.example.postappwithkolin.SourceData.SAGDataFromDataBase
@@ -39,8 +42,13 @@ class NewPostActivity : AppCompatActivity() {
     lateinit var btn_uploadPost: Button
     lateinit var tv_UserName: TextView
     lateinit var iv_UserPhoto: CircleImageView
+    lateinit var btn_uploadImage: Button
+    lateinit var btn_uploadVideo: Button
+    lateinit var vv_PostVideo: VideoView
+    lateinit var FL_video: FrameLayout
 
-    val REQ_CODE: Int = 1
+    val IV_REQ_CODE: Int = 1
+    val VV_REQ_CODE: Int = 2
     var uri: Uri? = null
 
     lateinit var userName: String
@@ -51,7 +59,8 @@ class NewPostActivity : AppCompatActivity() {
     //Initialize FireBase Storage
     val storage = Firebase.storage
     val storageRef = storage.reference
-    var PostImageUri: String? = null
+    var PostImageUri : String? = null
+    var postVideoUri : String? = null
 
 
     //Initialize FireBase Auth
@@ -70,58 +79,82 @@ class NewPostActivity : AppCompatActivity() {
         btn_uploadPost = findViewById(R.id.NPA_btn_uploadPost)
         tv_UserName = findViewById(R.id.NPA_UserName)
         iv_UserPhoto = findViewById(R.id.NPA_userPhoto)
+        btn_uploadVideo = findViewById(R.id.uploadVideo)
+        btn_uploadImage = findViewById(R.id.uploadImage)
+        vv_PostVideo = findViewById(R.id.NPA_IV_PostVideo)
+        FL_video = findViewById(R.id.frameLayoutForVideo)
 
         Picasso.get().load(mAuth.currentUser!!.photoUrl).into(iv_UserPhoto)
         tv_UserName.text = mAuth.currentUser!!.displayName
 
 
-        //send Image and Comment and Return to MainActivity
+        val mc = MediaController(this)
+        vv_PostVideo.setMediaController(mc)
+        mc.setAnchorView(vv_PostVideo)
+
         btn_uploadPost.setOnClickListener(View.OnClickListener {
-            var comment = et_Comment.text.toString()
+            val comment = et_Comment.text.toString()
             //save data in UserPost.class
-            userPost = UserPost(mAuth.currentUser!!.displayName.toString(), comment, PostImageUri.toString(), mAuth.currentUser!!.photoUrl.toString())
+            userPost = UserPost(mAuth.currentUser!!.displayName.toString(), comment, PostImageUri.toString() ,postVideoUri.toString() ,  mAuth.currentUser!!.photoUrl.toString())
             SendPosts.uploadPost(userPost)
 
             finish()
 
         })
 
-        iv_PostImage.setOnClickListener(View.OnClickListener {
-            //choose image from gallery
+
+        btn_uploadImage.setOnClickListener {
+            vv_PostVideo.visibility = View.GONE
             pickImage()
-        })
+        }
+
+        btn_uploadVideo.setOnClickListener {
+            iv_PostImage.visibility = View.GONE
+            pickVideo()
+        }
     }
 
 
-    //Pick Image From Gallery
     fun pickImage() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        startActivityForResult(intent, REQ_CODE)
+        startActivityForResult(intent, IV_REQ_CODE)
+    }
+
+
+    fun pickVideo(){
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "video/*"
+        startActivityForResult(intent, VV_REQ_CODE)
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
+        if (requestCode == IV_REQ_CODE && resultCode == RESULT_OK) {
             uri = data!!.data!!
             Picasso.get().load(uri).into(iv_PostImage)
-
-            //upload PostImage
             uploadPicture()
+            iv_PostImage.visibility = View.VISIBLE
 
+        }
+        else if(requestCode == VV_REQ_CODE && resultCode == RESULT_OK){
+            uri = data!!.data!!
+            vv_PostVideo.setVideoURI(uri)
+            FL_video.visibility = View.VISIBLE
+            vv_PostVideo.start()
+            uploadVideo()
         }
     }
 
-    //get FireExtension like (jpg or png)
     fun getFileExtension(uri: Uri): String {
         val cR: ContentResolver = getContentResolver();
         val mime: MimeTypeMap = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri))!!;
     }
 
-    //upload Picture to FireBase Storage
     fun uploadPicture() {
         var imagePath: String? = null
 
@@ -134,15 +167,15 @@ class NewPostActivity : AppCompatActivity() {
                     )
                 }"
             )
-            var dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
-            var dia = dialog.create()
+            val dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+            val dia = dialog.create()
             dia.show()
 
             storageReference.putFile(uri!!).addOnSuccessListener(OnSuccessListener {
                 //get image url
                 storageReference.downloadUrl.addOnSuccessListener {
                     PostImageUri = it.toString()
-                    Log.d("TAG", "uploadPicture: " + it.toString())
+                    postVideoUri = null
                     dia.dismiss()
                 }
 
@@ -150,5 +183,30 @@ class NewPostActivity : AppCompatActivity() {
         }
     }
 
+    fun uploadVideo(){
+        if (uri != null) {
+
+            val storageReference: StorageReference = storageRef.child(
+                "videos/${System.currentTimeMillis()}.${
+                    getFileExtension(
+                        uri!!
+                    )
+                }"
+            )
+            val dialog = AlertDialog.Builder(this).setView(R.layout.progress_wiat)
+            val dia = dialog.create()
+            dia.show()
+
+            storageReference.putFile(uri!!).addOnSuccessListener(OnSuccessListener {
+                //get image url
+                storageReference.downloadUrl.addOnSuccessListener {
+                    postVideoUri = it.toString()
+                    PostImageUri = null
+                    dia.dismiss()
+                }
+
+            })
+        }
+    }
 
 }

@@ -11,6 +11,7 @@ public class postTable {
     String userImage;
     String postImage;
     String userName;
+    String postVideo;
     String postName;
 
     public int getPostId() {
@@ -37,10 +38,15 @@ public class postTable {
         return postName;
     }
 
-    public postTable(String userImage, String postImage, String userName, String postName ) {
+    public String getPostVideo() {
+        return postVideo;
+    }
+
+    public postTable(String userImage, String postImage, String postVideo , String userName, String postName ) {
         this.userImage = userImage;
         this.postImage = postImage;
         this.userName = userName;
         this.postName = postName;
+        this.postVideo = postVideo;
     }
 }

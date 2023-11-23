@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
     android:background="@drawable/post_background"
     tools:context="com.example.postappwithkolin.UI.NewPostActivity">
 
@@ -61,10 +60,62 @@
         android:id="@+id/NPA_IV_PostImage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_256sdp"
-        android:layout_margin="@dimen/_10sdp"
         android:layout_below="@+id/NPA_et_comment"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:src="@drawable/new_post"
-        />
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/frameLayoutForVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/NPA_IV_PostImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="gone">
+
+        <VideoView
+            android:id="@+id/NPA_IV_PostVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_300sdp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/choose_typeOfPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/NPA_btn_uploadPost"
+        >
+
+        <Button
+            android:id="@+id/uploadImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Image"
+            style="@style/ChoosingImage"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
+            />
+
+        <Button
+            android:id="@+id/uploadVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Video"
+            style="@style/ChoosingVideo"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
+            />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/NPA_btn_uploadPost"
@@ -73,10 +124,10 @@
         android:layout_margin="@dimen/_10sdp"
         android:text="Publish"
         android:textAllCaps="false"
-        android:layout_below="@+id/NPA_IV_PostImage"
+        android:layout_alignParentBottom="true"
         style="@style/ButtonStyle"
-
-        android:padding="@dimen/_10sdp"/>
+        android:padding="@dimen/_10sdp"
+        />
 
 
 </RelativeLayout>

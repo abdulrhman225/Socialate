@@ -174,7 +174,7 @@ public class HomeFragment extends Fragment {
     public List<postTable> convertListFromUserPostToPostTable(ArrayList<UserPost> userPosts){
         List<postTable> post = new ArrayList<>();
         for (UserPost Posts : userPosts){
-            post.add(new postTable(Posts.getUserPhoto() , Posts.getPostImage() , Posts.getUserName() , Posts.getPostComment()));
+            post.add(new postTable(Posts.getUserPhoto() , Posts.getPostImage() , Posts.getPostVideo() , Posts.getUserName() , Posts.getPostComment()));
         }
         return post;
     }
@@ -211,7 +211,7 @@ public class HomeFragment extends Fragment {
         ArrayList<UserPost> post = new ArrayList<>();
 
         for (postTable Posts : postTables) {
-            post.add(new UserPost(Posts.getUserName(), Posts.getPostName(), Posts.getPostImage(), Posts.getUserImage()));
+            post.add(new UserPost(Posts.getUserName(), Posts.getPostName(), Posts.getPostImage(), Posts.getPostVideo() ,  Posts.getUserImage()));
 
         }
         return post;

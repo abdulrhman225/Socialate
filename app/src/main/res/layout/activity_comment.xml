@@ -21,7 +21,10 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_2sdp"
-            android:src="@drawable/ic_baseline_keyboard_return_24" />
+            android:src="@drawable/ic_baseline_keyboard_return_24"
+            />
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -111,12 +114,25 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:cropToPadding="false"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@android:drawable/ic_input_get" />
+                    app:srcCompat="@android:drawable/ic_input_get"
+                    />
+
+                <FrameLayout
+                    android:id="@+id/frameLayout_vv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/custom_PostImage"
+                    android:layout_centerHorizontal="true">
+                    <VideoView
+                        android:id="@+id/comment_Video"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_300sdp"/>
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/custom_PostImage"/>
+                    android:layout_below="@+id/frameLayout_vv"/>
 
             </RelativeLayout>
 

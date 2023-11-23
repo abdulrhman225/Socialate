@@ -21,6 +21,18 @@
         <item name="android:drawableLeft">@drawable/ic_baseline_message_24</item>
     </style>
 
+    <style name="ChoosingImage" parent="ThemeOverlay.Material3.Button">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/prime</item>
+        <item name="android:drawableLeft">@drawable/baseline_image_24</item>
+    </style>
+
+    <style name="ChoosingVideo" parent="ThemeOverlay.Material3.Button">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/prime</item>
+        <item name="android:drawableLeft">@drawable/baseline_ondemand_video_24</item>
+    </style>
+
     <style name="LoginStyel" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/prime</item>
         <item name="boxStrokeWidth">@dimen/_2sdp</item>

@@ -61,18 +61,38 @@
         android:cropToPadding="false"
         android:scaleType="centerCrop"
         app:srcCompat="@android:drawable/ic_input_get"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
+
+    <ViewAnimator
+        android:id="@+id/custom_fl_forVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_PostImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="gone">
+
+        <VideoView
+            android:id="@+id/custom_postVideo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_300sdp"
+            />
+    </ViewAnimator>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/custom_PostImage"
+        android:layout_below="@id/custom_fl_forVideo"
         >
+
         <Button
             android:id="@+id/custom_Comment"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Comment"
             style="@style/ButtonStyle"/>
 

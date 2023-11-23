@@ -372,12 +372,14 @@ class MainActivity : AppCompatActivity(), HomeFragment.OnItemClickListener1,
         val userPhoto: String = posts.get(position).UserPhoto
         val postImage: String = posts.get(position).postImage
         val postComment: String = posts.get(position).postComment
+        val postVideo:String = posts.get(position).postVideo
 
         intent.putExtra("UserName", userName)
         intent.putExtra("UserPhoto", userPhoto)
         intent.putExtra("postImage", postImage)
         intent.putExtra("postComment", postComment)
         intent.putExtra("position", position)
+        intent.putExtra("postVideo" , postVideo)
 
         startActivity(intent)
     }

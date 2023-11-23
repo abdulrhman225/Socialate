@@ -82,7 +82,7 @@ class profileActivity : AppCompatActivity(),Post_recycler.OnItemClickListener , 
 
         //observer to get data that have the same UserName
         model.mutable.observe(this , Observer {
-            rv = Post_recycler(it , this , this)
+            rv = Post_recycler(it , this , this )
             rv_posts.adapter = rv
             rv_posts.layoutManager = LinearLayoutManager(this)
             rv_posts.setHasFixedSize(true)

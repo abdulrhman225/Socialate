@@ -43,6 +43,7 @@ class SAGDataFromDataBase : ViewModel() {
     lateinit var userName_Post: String
     lateinit var comment_Post: String
     lateinit var PostImage_Post: String
+    lateinit var PostVideo_Post: String
     lateinit var UserPhoto_Post: String
     lateinit var userkey: String
 
@@ -295,6 +296,7 @@ class SAGDataFromDataBase : ViewModel() {
             "userName" to userPost.UserName,
             "postComment" to userPost.postComment,
             "PostImage" to userPost.postImage,
+            "PostVideo" to userPost.postVideo,
             "UserPhoto" to userPost.UserPhoto,
             "PostKey" to PostKey
         )
@@ -318,6 +320,8 @@ class SAGDataFromDataBase : ViewModel() {
                             it.get(n).child("postComment").getValue().toString()
                         PostImage_Post =
                             it.get(n).child("PostImage").getValue().toString()
+                        PostVideo_Post=
+                            it.get(n).child("PostVideo").getValue().toString()
                         UserPhoto_Post =
                             it.get(n).child("UserPhoto").getValue().toString()
 
@@ -325,7 +329,7 @@ class SAGDataFromDataBase : ViewModel() {
 
 
                         userPost =
-                            UserPost(userName_Post, comment_Post, PostImage_Post, UserPhoto_Post)
+                            UserPost(userName_Post, comment_Post, PostImage_Post,PostVideo_Post , UserPhoto_Post)
                         posts.add(userPost)
                     }
                     withContext(Dispatchers.Main) {
@@ -353,13 +357,15 @@ class SAGDataFromDataBase : ViewModel() {
                         snap.child("postComment").getValue().toString()
                     PostImage_Post =
                         snap.child("PostImage").getValue().toString()
+                    PostVideo_Post =
+                        snap.child("PostVideo").getValue().toString()
                     UserPhoto_Post =
                         snap.child("UserPhoto").getValue().toString()
 
                     if (userName_Post == UserName) {
 
                         userPost =
-                            UserPost(userName_Post, comment_Post, PostImage_Post, UserPhoto_Post)
+                            UserPost(userName_Post, comment_Post, PostImage_Post, PostVideo_Post, UserPhoto_Post)
                         posts.add(userPost)
                     }
                 }
