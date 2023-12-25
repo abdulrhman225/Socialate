@@ -84,9 +84,7 @@ private val listener1 : onCommentButtonClick
             holder.PostVideo.setVideoURI(Uri.parse(userPost.postVideo))
             holder.PostVideo.start()
 
-            val mc = MediaController(holder.fl_forVideo.context)
-            holder.PostVideo.setMediaController(mc)
-            mc.setAnchorView(holder.PostVideo)
+
 
         }
 
